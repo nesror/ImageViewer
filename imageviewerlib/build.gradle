@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+version = "0.0.1"
+group = "com.github.nesror" // jitpack.io
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName version
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.github.chrisbanes.photoview:library:1.2.2'
+    compile 'me.relex:circleindicator:1.2.1@aar'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+}
