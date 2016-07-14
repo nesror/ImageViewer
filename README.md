@@ -19,6 +19,13 @@ Use
 ----------------------------
 请看demo
 
+混淆配置
+----------------------------
+```
+	-keep class uk.co.senab.photoview.** { *; }
+	-dontwarn uk.co.senab.photoview.**
+```
+
 用到的第3方lib
 ----------------------------
 * compile 'com.github.chrisbanes.photoview:library:1.2.2'

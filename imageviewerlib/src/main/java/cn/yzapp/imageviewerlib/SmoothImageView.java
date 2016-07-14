@@ -82,6 +82,7 @@ public class SmoothImageView extends PhotoView {
      * 用于开始退出的方法。 调用此方前，需已经调用过setOriginalInfo
      */
     public void transformOut() {
+        mBgAlpha = 255;
         mState = STATE_TRANSFORM_OUT;
         mTransformStart = true;
         invalidate();

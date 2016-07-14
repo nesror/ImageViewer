@@ -15,3 +15,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class uk.co.senab.photoview.** { *; }
+-dontwarn uk.co.senab.photoview.**

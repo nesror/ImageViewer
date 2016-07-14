@@ -69,7 +69,6 @@ public class ImageViewerActivity extends Activity {
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float v, float v2) {
-                mRoot.setBackgroundColor(0xFF000000);
                 photoView.transformOut();
             }
         });
