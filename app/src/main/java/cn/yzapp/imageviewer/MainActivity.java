@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.yzapp.imageviewerlib.IntentHelper;
+import cn.yzapp.imageviewerlib.ImageViewer;
 import cn.yzapp.imageviewerlib.ShowImage;
 import cn.yzapp.imageviewerlib.Utils;
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
                     showImage.setSizes(sizes);
                     showImage.setIndex(finalI);
-                    IntentHelper.openImageViewer(MainActivity.this, showImage);
+                    ImageViewer.openImageViewer(MainActivity.this, showImage);
 
                 }
             });

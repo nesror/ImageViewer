@@ -11,7 +11,7 @@ import android.os.Bundle;
  * @email: gusiheng@qccr.com
  * @desc:
  */
-public class IntentHelper {
+public class ImageViewer {
     public static final String INTENT_IMAGE = "INTENT_IMAGE";
 
     /**

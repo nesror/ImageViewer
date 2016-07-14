@@ -50,7 +50,7 @@ public class ImageViewerActivity extends Activity {
     }
 
     private void getIntentData() {
-        mShowImage = getIntent().getParcelableExtra(IntentHelper.INTENT_IMAGE);
+        mShowImage = getIntent().getParcelableExtra(ImageViewer.INTENT_IMAGE);
 
     }
 
