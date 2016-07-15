@@ -1,6 +1,7 @@
 package cn.yzapp.imageviewerlib;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import me.relex.circleindicator.CircleIndicator;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -54,8 +57,19 @@ public class ImageViewerActivity extends Activity {
 
     }
 
-    private void setPhotoView(final SmoothImageView photoView, String imageUrl) {
-        Picasso.with(this).load(imageUrl).into(photoView);
+    private void setPhotoView(final SmoothImageView photoView, Object img) {
+        if (img instanceof String) {
+            Picasso.with(this).load((String) img).into(photoView);
+        }
+        if (img instanceof Integer) {
+            Picasso.with(this).load((int) img).into(photoView);
+        }
+        if (img instanceof File) {
+            Picasso.with(this).load((File) img).into(photoView);
+        }
+        if (img instanceof Bitmap) {
+            photoView.setImageBitmap((Bitmap) img);
+        }
 
         photoView.setOnTransformListener(new SmoothImageView.TransformListener() {
             @Override
@@ -80,21 +94,22 @@ public class ImageViewerActivity extends Activity {
 
         @Override
         public int getCount() {
-            return mShowImage.getImgUrl().size();
+            return mShowImage.getImg().size();
         }
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
 
-            int[] size = mShowImage.getSizes().get(position);
 
             SmoothImageView photoView = new SmoothImageView(container.getContext());
-            photoView.setOriginalInfo(size[0], size[1], size[2], size[3]);
+
+            setImgSite(position, photoView);
+
             if (position == mShowImage.getIndex() && !show) {
                 photoView.transformIn();
                 show = true;
             }
-            setPhotoView(photoView, mShowImage.getImgUrl().get(position));
+            setPhotoView(photoView, mShowImage.getImg().get(position));
 
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -111,5 +126,29 @@ public class ImageViewerActivity extends Activity {
             return view == object;
         }
 
+    }
+
+    /**
+     * 设置图片起始位置
+     */
+    private void setImgSite(int position, SmoothImageView photoView) {
+        int[] size = null;
+        if (mShowImage.getSizes() != null && mShowImage.getSizes().size() > position) {
+            size = mShowImage.getSizes().get(position);
+        }
+
+        if (size == null || size.length < 4) {
+            photoView.setOriginalInfo(
+                    0,
+                    0,
+                    Utils.getScreenWidth(ImageViewerActivity.this) / 2,
+                    Utils.getScreenHeight(ImageViewerActivity.this) / 2);
+        } else {
+            photoView.setOriginalInfo(
+                    size[0],
+                    size[1],
+                    size[2],
+                    size[3]);
+        }
     }
 }

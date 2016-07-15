@@ -32,25 +32,29 @@ public class MainActivity extends AppCompatActivity {
         int width = (Utils.getScreenWidth(this) - Utils.dip2px(this, 32)) / 3;
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, width);
 
-        final ArrayList<String> urlList = new ArrayList<>();
+        final ArrayList<Object> urlList = new ArrayList<>();
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
-        urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
+        urlList.add(R.mipmap.ic_launcher);
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
 
         final ShowImage showImage = new ShowImage();
-        showImage.setImgUrl(urlList);
+        showImage.setImg(urlList);
         final List<ImageView> imgs = new ArrayList<>();
 
         int i = 0;
-        for (String url : urlList) {
+        for (Object url : urlList) {
 
             final View view = View.inflate(this, R.layout.view_img, null);
             final ImageView img = (ImageView) view.findViewById(R.id.img);
-            Picasso.with(this).load(url).into(img);
+            if (url instanceof Integer) {
+                Picasso.with(this).load((int) url).into(img);
+            }else{
+                Picasso.with(this).load((String) url).into(img);
+            }
             img.setLayoutParams(lp);
 
             imgs.add(img);

@@ -15,7 +15,7 @@ public class ShowImage implements Parcelable {
 
     private int index;
 
-    private List<String> imgUrl;
+    private List<Object> img;
 
     public List<int[]> getSizes() {
         return sizes;
@@ -40,15 +40,16 @@ public class ShowImage implements Parcelable {
         this.index = index;
     }
 
-    public List<String> getImgUrl() {
-        return imgUrl;
+    public List<Object> getImg() {
+        return img;
     }
 
     /**
-     * 图片的url
+     * 设置图片
+     * 传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      */
-    public void setImgUrl(List<String> imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImg(List<Object> img) {
+        this.img = img;
     }
 
 
@@ -61,7 +62,7 @@ public class ShowImage implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeList(this.sizes);
         dest.writeInt(this.index);
-        dest.writeStringList(this.imgUrl);
+        dest.writeList(this.img);
     }
 
     public ShowImage() {
@@ -71,7 +72,8 @@ public class ShowImage implements Parcelable {
         this.sizes = new ArrayList<int[]>();
         in.readList(this.sizes, int[].class.getClassLoader());
         this.index = in.readInt();
-        this.imgUrl = in.createStringArrayList();
+        this.img = new ArrayList<Object>();
+        in.readList(this.img, Object.class.getClassLoader());
     }
 
     public static final Creator<ShowImage> CREATOR = new Creator<ShowImage>() {

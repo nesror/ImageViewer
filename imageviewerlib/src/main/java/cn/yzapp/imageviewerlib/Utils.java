@@ -1,15 +1,8 @@
 package cn.yzapp.imageviewerlib;
 
-import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
 
 /**
  * @author: nestor
