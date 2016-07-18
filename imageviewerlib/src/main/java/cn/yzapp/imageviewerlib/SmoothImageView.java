@@ -65,8 +65,6 @@ public class SmoothImageView extends PhotoView {
         mOriginalHeight = height;
         mOriginalLocationX = locationX;
         mOriginalLocationY = locationY;
-        // 因为是屏幕坐标，所以要转换为该视图内的坐标，因为我所用的该视图是MATCH_PARENT，所以不用定位该视图的位置,如果不是的话，还需要定位视图的位置，然后计算mOriginalLocationX和mOriginalLocationY
-        mOriginalLocationY = mOriginalLocationY - Utils.getStatusBarHeight(getContext());
     }
 
     /**
