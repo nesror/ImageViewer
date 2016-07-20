@@ -17,7 +17,7 @@ Step 2. Add the dependency
 
 Use
 ----------------------------
-1. 实现IImageLoader设置图片加载器，也可以使用默认实现类DefaultImageLoader()
+Step 1. 实现IImageLoader设置图片加载器，也可以使用默认实现类DefaultImageLoader()
 ```{java}
     ImageViewer.setImageLoader(new IImageLoader() {
             @Override
@@ -40,7 +40,7 @@ Use
 
         });
 ```
-2. 使用
+Step 2. 使用
 ```{java}
     /**
      * 打开图片浏览多张
