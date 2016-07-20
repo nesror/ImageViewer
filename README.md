@@ -17,7 +17,42 @@ Step 2. Add the dependency
 
 Use
 ----------------------------
-请看demo
+1. 实现IImageLoader设置图片加载器，也可以使用默认实现类DefaultImageLoader()
+```{java}
+    ImageViewer.setImageLoader(new IImageLoader() {
+            @Override
+            public void getImage(Context context, ImageView imageView, String Url) {
+                Picasso.with(MainActivity.this).load(Url).into(imageView);
+            }
+
+            @Override
+            public void getImage(Context context, ImageView imageView, File file) {
+                
+            }
+
+            @Override
+            public void getImage(Context context, ImageView imageView, @DrawableRes int res) {
+
+            }
+
+            @Override
+            public void getImage(Context context, ImageView imageView, Bitmap bitmap) {
+
+        });
+```
+2. 使用
+```{java}
+    /**
+     * 打开图片浏览多张
+     *
+     * @param context    Context
+     * @param imageViews ImageView
+     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param clickItem  点击的图片
+     */
+    public static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) 
+```
+* 更多方法详见Demo
 
 混淆配置
 ----------------------------
@@ -30,5 +65,4 @@ Use
 ----------------------------
 * compile 'com.github.chrisbanes.photoview:library:1.2.2'
 * compile 'me.relex:circleindicator:1.2.1@aar'
-* compile 'com.squareup.picasso:picasso:2.5.2'
 * 图片缩放代码参考自CocolVook/SimplifyReader
