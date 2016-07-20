@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "0.0.6"
+version = "0.1.0"
 group = "com.github.nesror" // jitpack.io
 
 android {
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 5
+        versionCode 7
         versionName version
     }
     buildTypes {
@@ -27,5 +27,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.github.chrisbanes.photoview:library:1.2.2'
     compile 'me.relex:circleindicator:1.2.1@aar'
-    compile 'com.squareup.picasso:picasso:2.5.2'
 }

@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.squareup.picasso.Picasso;
-
 import java.io.File;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -59,16 +57,16 @@ public class ImageViewerActivity extends Activity {
 
     private void setPhotoView(final SmoothImageView photoView, Object img) {
         if (img instanceof String) {
-            Picasso.with(this).load((String) img).into(photoView);
+            ImageViewer.getImageLoader().getImage(this, photoView, (String) img);
         }
         if (img instanceof Integer) {
-            Picasso.with(this).load((int) img).into(photoView);
+            ImageViewer.getImageLoader().getImage(this, photoView, (int) img);
         }
         if (img instanceof File) {
-            Picasso.with(this).load((File) img).into(photoView);
+            ImageViewer.getImageLoader().getImage(this, photoView, (File) img);
         }
         if (img instanceof Bitmap) {
-            photoView.setImageBitmap((Bitmap) img);
+            ImageViewer.getImageLoader().getImage(this, photoView, (Bitmap) img);
         }
 
         photoView.setOnTransformListener(new SmoothImageView.TransformListener() {

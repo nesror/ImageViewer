@@ -1,6 +1,9 @@
 package cn.yzapp.imageviewer;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.GridLayout;
@@ -9,11 +12,13 @@ import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.yzapp.imageviewerlib.DefaultImageLoader;
+import cn.yzapp.imageviewerlib.IImageLoader;
 import cn.yzapp.imageviewerlib.ImageViewer;
-import cn.yzapp.imageviewerlib.ShowImage;
 import cn.yzapp.imageviewerlib.Utils;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        ImageViewer.setImageLoader(new DefaultImageLoader() {
+            @Override
+            public void getImage(Context context, ImageView imageView, String Url) {
+                Picasso.with(MainActivity.this).load(Url).into(imageView);
+            }
+        });
+
+
         GridLayout layout = (GridLayout) findViewById(R.id.layout);
 
         int width = (Utils.getScreenWidth(this) - Utils.dip2px(this, 32)) / 3;
@@ -41,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
 
-        final ShowImage showImage = new ShowImage();
-        showImage.setImg(urlList);
         final List<ImageView> imgs = new ArrayList<>();
 
         int i = 0;
@@ -52,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             final ImageView img = (ImageView) view.findViewById(R.id.img);
             if (url instanceof Integer) {
                 Picasso.with(this).load((int) url).into(img);
-            }else{
+            } else {
                 Picasso.with(this).load((String) url).into(img);
             }
             img.setLayoutParams(lp);
@@ -63,31 +74,13 @@ public class MainActivity extends AppCompatActivity {
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    List<int[]> sizes = new ArrayList<>();
-                    for (ImageView imageView : imgs) {
-                        int[] location = new int[2];
-                        imageView.getLocationOnScreen(location);
-                        int width = imageView.getWidth();
-                        int height = imageView.getHeight();
-
-                        int[] size = new int[4];
-                        size[0] = width;
-                        size[1] = height;
-                        size[2] = location[0];
-                        size[3] = location[1];
-
-                        sizes.add(size);
-                    }
-
-                    showImage.setSizes(sizes);
-                    showImage.setIndex(finalI);
-                    ImageViewer.openImageViewer(MainActivity.this, showImage);
-
+                    ImageViewer.openImageViewer(MainActivity.this, imgs, urlList, finalI);
                 }
             });
 
-            layout.addView(view);
+            if (layout != null) {
+                layout.addView(view);
+            }
 
             i++;
         }
