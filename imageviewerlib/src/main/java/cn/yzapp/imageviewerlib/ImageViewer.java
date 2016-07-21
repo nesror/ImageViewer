@@ -93,21 +93,57 @@ public class ImageViewer {
      * @param clickItem  点击的图片
      */
     public static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
+        openImageViewer(context, imageViews, objects, clickItem, false);
+    }
+
+    /**
+     * 打开图片浏览多张,只根据第一张图片来播放动画
+     *
+     * @param context    Context
+     * @param imageViews ImageView
+     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param clickItem  点击的图片
+     */
+    public static void openImageViewerWithFirstSize(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
+        openImageViewer(context, imageViews, objects, clickItem, true);
+    }
+
+    /**
+     * 打开图片浏览多张
+     *
+     * @param context    Context
+     * @param imageViews ImageView
+     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param clickItem  点击的图片
+     * @param sizeFirst  只根据第一张图片来播放动画
+     */
+    private static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem, boolean sizeFirst) {
         final ShowImage showImage = new ShowImage();
         showImage.setImg(objects);
 
         List<int[]> sizes = new ArrayList<>();
         for (ImageView imageView : imageViews) {
             int[] location = new int[2];
-            imageView.getLocationOnScreen(location);
-            int width = imageView.getWidth();
-            int height = imageView.getHeight();
-
             int[] size = new int[4];
-            size[0] = width;
-            size[1] = height;
-            size[2] = location[0];
-            size[3] = location[1];
+            if (sizeFirst) {
+                imageViews.get(0).getLocationOnScreen(location);
+                int width = imageView.getWidth();
+                int height = imageView.getHeight();
+
+                size[0] = width;
+                size[1] = height;
+                size[2] = location[0];
+                size[3] = location[1];
+            } else {
+                imageView.getLocationOnScreen(location);
+                int width = imageView.getWidth();
+                int height = imageView.getHeight();
+
+                size[0] = width;
+                size[1] = height;
+                size[2] = location[0];
+                size[3] = location[1];
+            }
 
             sizes.add(size);
         }
