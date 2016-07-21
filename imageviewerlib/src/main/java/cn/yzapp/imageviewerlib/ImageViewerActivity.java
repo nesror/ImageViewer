@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -44,6 +45,22 @@ public class ImageViewerActivity extends Activity {
 
         mViewPager.setCurrentItem(mShowImage.getIndex());
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                ImageViewer.changeItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
     }
 
     @Override
@@ -56,7 +73,6 @@ public class ImageViewerActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        ImageViewer.changeItem(mViewPager.getCurrentItem());
         super.onDestroy();
     }
 

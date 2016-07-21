@@ -56,8 +56,11 @@ public class ImageViewer {
      * 设置当前选中的图片的监听
      */
     public static void setOnChangeItemListener(OnChangeItemListener changeItemListener) {
-        // TODO: nestor 7/21 021 多个activity都setOnChangeItemListener，并且没有销毁会有bug
         mChangeItemListener = changeItemListener;
+    }
+
+    public static void cleanOnChangeItemListener(){
+        mChangeItemListener = null;
     }
 
     /**
@@ -188,6 +191,7 @@ public class ImageViewer {
         if (mImageLoader == null) {
             return;
         }
+
         Bundle extras = new Bundle();
         extras.putParcelable(INTENT_IMAGE, showImage);
         extras.putInt(CHOOSE_RES_IS, mChooseResIs);
