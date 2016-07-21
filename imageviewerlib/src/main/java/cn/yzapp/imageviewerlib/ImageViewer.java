@@ -23,6 +23,7 @@ public class ImageViewer {
 
     private static int mChooseResIs;
     private static int mUnChooseResIs;
+    private static OnChangeItemListener mChangeItemListener;
 
     /**
      * 设置图片加载器，必须实现
@@ -49,6 +50,14 @@ public class ImageViewer {
 
     public static IImageLoader getImageLoader() {
         return mImageLoader;
+    }
+
+    /**
+     * 设置当前选中的图片的监听
+     */
+    public static void setOnChangeItemListener(OnChangeItemListener changeItemListener) {
+        // TODO: nestor 7/21 021 多个activity都setOnChangeItemListener，并且没有销毁会有bug
+        mChangeItemListener = changeItemListener;
     }
 
     /**
@@ -187,5 +196,14 @@ public class ImageViewer {
         intent.putExtras(extras);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(0, 0);
+    }
+
+    public static void changeItem(int currentItem) {
+        if (mChangeItemListener != null)
+            mChangeItemListener.onChangeItem(currentItem);
+    }
+
+    public interface OnChangeItemListener {
+        void onChangeItem(int currentItem);
     }
 }

@@ -1,10 +1,9 @@
 package cn.yzapp.imageviewer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -12,12 +11,10 @@ import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.yzapp.imageviewerlib.DefaultImageLoader;
-import cn.yzapp.imageviewerlib.IImageLoader;
 import cn.yzapp.imageviewerlib.ImageViewer;
 import cn.yzapp.imageviewerlib.Utils;
 
@@ -40,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         });
         //ImageViewer.setChooseResIs(R.drawable.img_point_focused);
         //ImageViewer.setUnChooseResIs(R.drawable.img_point_nomal);
+        /*ImageViewer.setOnChangeItemListener(new ImageViewer.OnChangeItemListener() {
+            @Override
+            public void onChangeItem(int currentItem) {
+                Log.d("", "currentItem" + currentItem);
+            }
+        });*/
 
         GridLayout layout = (GridLayout) findViewById(R.id.layout);
 

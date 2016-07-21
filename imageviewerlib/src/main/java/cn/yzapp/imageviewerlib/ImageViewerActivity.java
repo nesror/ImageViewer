@@ -54,6 +54,12 @@ public class ImageViewerActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        ImageViewer.changeItem(mViewPager.getCurrentItem());
+        super.onDestroy();
+    }
+
     private void setPhotoView(final SmoothImageView photoView, Object img) {
         if (img instanceof String) {
             ImageViewer.getImageLoader().getImage(this, photoView, (String) img);
