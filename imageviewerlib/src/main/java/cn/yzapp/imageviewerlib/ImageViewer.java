@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -15,7 +16,13 @@ import java.util.List;
  */
 public class ImageViewer {
     public static final String INTENT_IMAGE = "INTENT_IMAGE";
+    public static final String CHOOSE_RES_IS = "CHOOSE_RES_IS";
+    public static final String UNCHOOSE_RES_IS = "UNCHOOSE_RES_IS";
+
     private static IImageLoader mImageLoader;
+
+    private static int mChooseResIs;
+    private static int mUnChooseResIs;
 
     /**
      * 设置图片加载器，必须实现
@@ -24,6 +31,20 @@ public class ImageViewer {
      */
     public static void setImageLoader(IImageLoader imageLoader) {
         mImageLoader = imageLoader;
+    }
+
+    /**
+     * 设置选中时的指示器颜色
+     */
+    public static void setChooseResIs(@DrawableRes int chooseResIs) {
+        mChooseResIs = chooseResIs;
+    }
+
+    /**
+     * 设置未选中时的指示器颜色
+     */
+    public static void setUnChooseResIs(@DrawableRes int unChooseResIs) {
+        mUnChooseResIs = unChooseResIs;
     }
 
     public static IImageLoader getImageLoader() {
@@ -37,14 +58,14 @@ public class ImageViewer {
      * @param imageView ImageView
      * @param object    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      */
-    public static void openImageViewer(Context context, ImageView imageView, Object object) {
+    public static void open(Context context, ImageView imageView, Object object) {
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(object);
 
         List<ImageView> imageViews = new ArrayList<>();
         imageViews.add(imageView);
 
-        openImageViewer(context, imageViews, objects, 0);
+        open(context, imageViews, objects, 0);
     }
 
     /**
@@ -92,7 +113,7 @@ public class ImageViewer {
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
-    public static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
+    public static void open(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
         openImageViewer(context, imageViews, objects, clickItem, false);
     }
 
@@ -104,7 +125,7 @@ public class ImageViewer {
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
-    public static void openImageViewerWithFirstSize(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
+    public static void openWithChoose(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
         openImageViewer(context, imageViews, objects, clickItem, true);
     }
 
@@ -126,7 +147,7 @@ public class ImageViewer {
             int[] location = new int[2];
             int[] size = new int[4];
             if (sizeFirst) {
-                imageViews.get(0).getLocationOnScreen(location);
+                imageViews.get(clickItem).getLocationOnScreen(location);
                 int width = imageView.getWidth();
                 int height = imageView.getHeight();
 
@@ -160,6 +181,8 @@ public class ImageViewer {
         }
         Bundle extras = new Bundle();
         extras.putParcelable(INTENT_IMAGE, showImage);
+        extras.putInt(CHOOSE_RES_IS, mChooseResIs);
+        extras.putInt(UNCHOOSE_RES_IS, mUnChooseResIs);
         Intent intent = new Intent(context, ImageViewerActivity.class);
         intent.putExtras(extras);
         context.startActivity(intent);

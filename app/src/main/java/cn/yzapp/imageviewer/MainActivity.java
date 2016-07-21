@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.with(MainActivity.this).load(Url).into(imageView);
             }
         });
-
+        //ImageViewer.setChooseResIs(R.drawable.img_point_focused);
+        //ImageViewer.setUnChooseResIs(R.drawable.img_point_nomal);
 
         GridLayout layout = (GridLayout) findViewById(R.id.layout);
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageViewer.openImageViewer(MainActivity.this, imgs, urlList, finalI);
+                    ImageViewer.open(MainActivity.this, imgs, urlList, finalI);
                 }
             });
 

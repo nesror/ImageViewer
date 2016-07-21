@@ -33,7 +33,11 @@ public class ImageViewerActivity extends Activity {
         mIndicator = (CircleIndicator) findViewById(R.id.indicator);
         mRoot = (RelativeLayout) findViewById(R.id.root);
 
-        getIntentData();
+        mShowImage = getIntent().getParcelableExtra(ImageViewer.INTENT_IMAGE);
+
+        int indicatorBackgroundId = getIntent().getIntExtra(ImageViewer.CHOOSE_RES_IS, 0);
+        int indicatorUnselectedBackgroundId = getIntent().getIntExtra(ImageViewer.UNCHOOSE_RES_IS, 0);
+        mIndicator.configureIndicator(-1, -1, -1, 0, 0, indicatorBackgroundId, indicatorUnselectedBackgroundId);
 
         mViewPager.setAdapter(new SamplePagerAdapter());
         mIndicator.setViewPager(mViewPager);
@@ -48,11 +52,6 @@ public class ImageViewerActivity extends Activity {
         if (isFinishing()) {
             overridePendingTransition(0, 0);
         }
-    }
-
-    private void getIntentData() {
-        mShowImage = getIntent().getParcelableExtra(ImageViewer.INTENT_IMAGE);
-
     }
 
     private void setPhotoView(final SmoothImageView photoView, Object img) {
