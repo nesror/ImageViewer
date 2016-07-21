@@ -1,5 +1,5 @@
 # ImageViewer
-仿微信朋友圈图片浏览，带进入和退出的动画
+![image](img/img1.gif)
 
 Add ImageViewer to your project
 ----------------------------
@@ -27,7 +27,7 @@ Step 1. 实现IImageLoader设置图片加载器，也可以使用默认实现类
 
             @Override
             public void getImage(Context context, ImageView imageView, File file) {
-                
+
             }
 
             @Override
@@ -50,7 +50,7 @@ Step 2. 使用
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
-    public static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) 
+    public static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem)
 ```
 * 更多方法详见Demo
 
