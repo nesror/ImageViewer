@@ -5,8 +5,8 @@ import android.view.Display;
 import android.view.WindowManager;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * @author nestor
+ * email nestor@yzapp.cn
  */
 public class Utils {
     /**

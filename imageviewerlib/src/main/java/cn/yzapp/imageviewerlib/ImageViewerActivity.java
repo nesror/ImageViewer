@@ -16,8 +16,8 @@ import me.relex.circleindicator.CircleIndicator;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * @author nestor
+ * email nestor@yzapp.cn
  */
 public class ImageViewerActivity extends Activity {
 

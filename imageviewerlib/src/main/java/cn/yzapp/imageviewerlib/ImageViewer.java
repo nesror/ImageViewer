@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * @author nestor
+ * email nestor@yzapp.cn
  */
 public class ImageViewer {
     public static final String BROADCAST_ACTION = "com.github.nesror:ImageViewer";

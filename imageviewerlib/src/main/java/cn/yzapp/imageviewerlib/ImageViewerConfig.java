@@ -3,8 +3,9 @@ package cn.yzapp.imageviewerlib;
 import android.support.annotation.DrawableRes;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * @author nestor
+ * email nestor@yzapp.cn
+ * ImageViewer的全局设置
  */
 public class ImageViewerConfig {
     private static IImageLoader mImageLoader;

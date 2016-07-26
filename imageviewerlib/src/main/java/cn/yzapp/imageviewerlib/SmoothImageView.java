@@ -18,8 +18,13 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import uk.co.senab.photoview.PhotoView;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * 基于 @author Dean Tao 的SmoothImageView修改而来
+ *
+ * 原注释：
+ * 2d平滑变化的显示图片的ImageView
+ * 仅限于用于:从一个ScaleType==CENTER_CROP的ImageView，切换到另一个ScaleType=
+ * FIT_CENTER的ImageView，或者反之 (当然，得使用同样的图片最好)
+ *
  */
 public class SmoothImageView extends PhotoView {
 

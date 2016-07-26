@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import java.io.File;
 
 /**
- * @author: nestor
+ * @author nestor
  * email: nestor@yzapp.cn
  * 图片加载默认实现类，文件与链接的图片加载需要根据自己的项目里用到的图片加载类来自己实现
  * 也可以使用IImageLoader

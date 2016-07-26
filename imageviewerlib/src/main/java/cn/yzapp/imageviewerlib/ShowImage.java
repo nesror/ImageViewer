@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * @author nestor
+ * email nestor@yzapp.cn
  */
 public class ShowImage implements Parcelable {
     private List<int[]> sizes;

@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import java.io.File;
 
 /**
- * @author: nestor
- * email: nestor@yzapp.cn
+ * @author nestor
+ * email nestor@yzapp.cn
  * 图片加载接口
  */
 public interface IImageLoader {
