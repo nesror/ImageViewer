@@ -1,13 +1,14 @@
 package cn.yzapp.imageviewerlib;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import java.io.File;
 
@@ -20,19 +21,18 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class ImageViewerActivity extends Activity {
 
-    HackyViewPager mViewPager;
-    CircleIndicator mIndicator;
-    RelativeLayout mRoot;
-
     private ShowImage mShowImage;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+
         setContentView(R.layout.activity_image_viewer);
-        mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
-        mIndicator = (CircleIndicator) findViewById(R.id.indicator);
-        mRoot = (RelativeLayout) findViewById(R.id.root);
+        final HackyViewPager mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
+        CircleIndicator mIndicator = (CircleIndicator) findViewById(R.id.indicator);
 
         mShowImage = getIntent().getParcelableExtra(ImageViewer.INTENT_IMAGE);
 
@@ -53,7 +53,8 @@ public class ImageViewerActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
-                ImageViewer.changeItem(position);
+                sendBroadcast(position);
+                ((SmoothImageView) mViewPager.getChildAt(position)).setScale(1);
             }
 
             @Override
@@ -61,6 +62,13 @@ public class ImageViewerActivity extends Activity {
             }
         });
 
+    }
+
+    private void sendBroadcast(int position) {
+        Intent intent = new Intent();
+        intent.setAction(ImageViewer.BROADCAST_ACTION);
+        intent.putExtra("position", position);
+        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
     @Override
@@ -73,21 +81,26 @@ public class ImageViewerActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        Intent intent = new Intent();
+        intent.setAction(ImageViewer.BROADCAST_ACTION);
+        intent.putExtra("onDestroy", true);
+        mLocalBroadcastManager.sendBroadcast(intent);
+
         super.onDestroy();
     }
 
     private void setPhotoView(final SmoothImageView photoView, Object img) {
         if (img instanceof String) {
-            ImageViewer.getImageLoader().getImage(this, photoView, (String) img);
+            ImageViewerConfig.getImageLoader().getImage(this, photoView, (String) img);
         }
         if (img instanceof Integer) {
-            ImageViewer.getImageLoader().getImage(this, photoView, (int) img);
+            ImageViewerConfig.getImageLoader().getImage(this, photoView, (int) img);
         }
         if (img instanceof File) {
-            ImageViewer.getImageLoader().getImage(this, photoView, (File) img);
+            ImageViewerConfig.getImageLoader().getImage(this, photoView, (File) img);
         }
         if (img instanceof Bitmap) {
-            ImageViewer.getImageLoader().getImage(this, photoView, (Bitmap) img);
+            ImageViewerConfig.getImageLoader().getImage(this, photoView, (Bitmap) img);
         }
 
         photoView.setOnTransformListener(new SmoothImageView.TransformListener() {
@@ -121,7 +134,6 @@ public class ImageViewerActivity extends Activity {
 
 
             SmoothImageView photoView = new SmoothImageView(container.getContext());
-
             setImgSite(position, photoView);
 
             if (position == mShowImage.getIndex() && !show) {

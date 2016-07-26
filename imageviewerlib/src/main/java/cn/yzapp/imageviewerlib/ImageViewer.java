@@ -3,8 +3,10 @@ package cn.yzapp.imageviewerlib;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -15,52 +17,64 @@ import java.util.List;
  * email: nestor@yzapp.cn
  */
 public class ImageViewer {
+    public static final String BROADCAST_ACTION = "com.github.nesror:ImageViewer";
+
     public static final String INTENT_IMAGE = "INTENT_IMAGE";
     public static final String CHOOSE_RES_IS = "CHOOSE_RES_IS";
     public static final String UNCHOOSE_RES_IS = "UNCHOOSE_RES_IS";
 
-    private static IImageLoader mImageLoader;
+    private static OnChangeItemListener mChangeItemListener;
+    private static ImageViewerBroadcastReceiver mBroadcastReceiver;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
     private static int mChooseResIs;
     private static int mUnChooseResIs;
-    private static OnChangeItemListener mChangeItemListener;
 
-    /**
-     * 设置图片加载器，必须实现
-     *
-     * @param imageLoader IImageLoader
-     */
-    public static void setImageLoader(IImageLoader imageLoader) {
-        mImageLoader = imageLoader;
+    public ImageViewer() {
+        initRes();
+    }
+
+    public ImageViewer(final OnImageViewerListener changeItemListener) {
+        initRes();
+
+        mChangeItemListener = new OnChangeItemListener() {
+            @Override
+            public void onChangeItem(int currentItem) {
+                changeItemListener.onChangeItem(currentItem);
+            }
+
+            @Override
+            public void onDestroy() {
+                if (mLocalBroadcastManager != null)
+                    mLocalBroadcastManager.unregisterReceiver(mBroadcastReceiver);
+            }
+        };
+    }
+
+    private void initRes() {
+        mChooseResIs = ImageViewerConfig.getChooseResIs();
+        mUnChooseResIs = ImageViewerConfig.getUnChooseResIs();
     }
 
     /**
-     * 设置选中时的指示器颜色
+     * 清除当前ImageViewer选中的图片的监听
+     */
+    public void cleanOnChangeItemListener() {
+        mChangeItemListener = null;
+    }
+
+    /**
+     * 设置当前ImageViewer选中时的指示器颜色
      */
     public static void setChooseResIs(@DrawableRes int chooseResIs) {
         mChooseResIs = chooseResIs;
     }
 
     /**
-     * 设置未选中时的指示器颜色
+     * 设置当前ImageViewer未选中时的指示器颜色
      */
     public static void setUnChooseResIs(@DrawableRes int unChooseResIs) {
         mUnChooseResIs = unChooseResIs;
-    }
-
-    public static IImageLoader getImageLoader() {
-        return mImageLoader;
-    }
-
-    /**
-     * 设置当前选中的图片的监听
-     */
-    public static void setOnChangeItemListener(OnChangeItemListener changeItemListener) {
-        mChangeItemListener = changeItemListener;
-    }
-
-    public static void cleanOnChangeItemListener(){
-        mChangeItemListener = null;
     }
 
     /**
@@ -70,7 +84,7 @@ public class ImageViewer {
      * @param imageView ImageView
      * @param object    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      */
-    public static void open(Context context, ImageView imageView, Object object) {
+    public void open(Context context, ImageView imageView, Object object) {
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(object);
 
@@ -81,43 +95,6 @@ public class ImageViewer {
     }
 
     /**
-     * 打开图片浏览单张
-     *
-     * @param context   Context
-     * @param imageView ImageView
-     */
-    /*public static void openImageViewer(Context context, ImageView imageView) {
-        ArrayList<Object> objects = new ArrayList<>();
-        imageView.buildDrawingCache();
-        imageView.setDrawingCacheEnabled(true);
-        objects.add(Bitmap.createBitmap(imageView.getDrawingCache()));
-        imageView.setDrawingCacheEnabled(false);
-
-        List<ImageView> imageViews = new ArrayList<>();
-        imageViews.add(imageView);
-
-        openImageViewer(context, imageViews, objects, 0);
-    }*/
-
-    /**
-     * 打开图片浏览多张
-     *
-     * @param context    Context
-     * @param imageViews ImageView
-     * @param clickItem  点击的图片
-     */
-    /*public static void openImageViewer(Context context, List<ImageView> imageViews, int clickItem) {
-        ArrayList<Object> objects = new ArrayList<>();
-        for (ImageView imageView : imageViews) {
-            imageView.setDrawingCacheEnabled(true);
-            objects.add(Bitmap.createBitmap(imageView.getDrawingCache()));
-            imageView.setDrawingCacheEnabled(false);
-        }
-
-        openImageViewer(context, imageViews, objects, clickItem);
-    }*/
-
-    /**
      * 打开图片浏览多张
      *
      * @param context    Context
@@ -125,7 +102,7 @@ public class ImageViewer {
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
-    public static void open(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
+    public void open(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
         openImageViewer(context, imageViews, objects, clickItem, false);
     }
 
@@ -137,7 +114,7 @@ public class ImageViewer {
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
-    public static void openWithChoose(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
+    public void openWithChoose(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
         openImageViewer(context, imageViews, objects, clickItem, true);
     }
 
@@ -150,7 +127,7 @@ public class ImageViewer {
      * @param clickItem  点击的图片
      * @param sizeFirst  只根据第一张图片来播放动画
      */
-    private static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem, boolean sizeFirst) {
+    private void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem, boolean sizeFirst) {
         final ShowImage showImage = new ShowImage();
         showImage.setImg(objects);
 
@@ -187,11 +164,17 @@ public class ImageViewer {
         openImageViewer(context, showImage);
     }
 
-    private static void openImageViewer(Context context, ShowImage showImage) {
-        if (mImageLoader == null) {
+    private void openImageViewer(Context context, ShowImage showImage) {
+        if (ImageViewerConfig.getImageLoader() == null) {
             return;
         }
 
+        registerReceiver(context);
+
+        startActivity(context, showImage);
+    }
+
+    private void startActivity(Context context, ShowImage showImage) {
         Bundle extras = new Bundle();
         extras.putParcelable(INTENT_IMAGE, showImage);
         extras.putInt(CHOOSE_RES_IS, mChooseResIs);
@@ -202,12 +185,26 @@ public class ImageViewer {
         ((Activity) context).overridePendingTransition(0, 0);
     }
 
-    public static void changeItem(int currentItem) {
-        if (mChangeItemListener != null)
-            mChangeItemListener.onChangeItem(currentItem);
+    private void registerReceiver(Context context) {
+        if (mChangeItemListener == null) return;
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(context);
+
+        mBroadcastReceiver = new ImageViewerBroadcastReceiver(mChangeItemListener);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BROADCAST_ACTION);
+        mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);
+
+
     }
 
     public interface OnChangeItemListener {
+        void onChangeItem(int currentItem);
+
+        void onDestroy();
+    }
+
+    public interface OnImageViewerListener {
         void onChangeItem(int currentItem);
     }
 }

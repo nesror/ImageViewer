@@ -16,33 +16,24 @@ import java.util.List;
 
 import cn.yzapp.imageviewerlib.DefaultImageLoader;
 import cn.yzapp.imageviewerlib.ImageViewer;
+import cn.yzapp.imageviewerlib.ImageViewerConfig;
 import cn.yzapp.imageviewerlib.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ImageViewer.OnImageViewerListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setImagerViewerConfig();
+
         initView();
     }
 
     private void initView() {
-        ImageViewer.setImageLoader(new DefaultImageLoader() {
-            @Override
-            public void getImage(Context context, ImageView imageView, String Url) {
-                Picasso.with(MainActivity.this).load(Url).into(imageView);
-            }
-        });
-        //ImageViewer.setChooseResIs(R.drawable.img_point_focused);
-        //ImageViewer.setUnChooseResIs(R.drawable.img_point_nomal);
-        /*ImageViewer.setOnChangeItemListener(new ImageViewer.OnChangeItemListener() {
-            @Override
-            public void onChangeItem(int currentItem) {
-                Log.d("", "currentItem" + currentItem);
-            }
-        });*/
+
+        final ImageViewer imageViewer = new ImageViewer(this);
 
         GridLayout layout = (GridLayout) findViewById(R.id.layout);
 
@@ -78,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageViewer.open(MainActivity.this, imgs, urlList, finalI);
+                    imageViewer.open(MainActivity.this, imgs, urlList, finalI);
                 }
             });
 
@@ -88,5 +79,24 @@ public class MainActivity extends AppCompatActivity {
 
             i++;
         }
+    }
+
+    /**
+     * ImageViewer的全局设置
+     */
+    private void setImagerViewerConfig() {
+        ImageViewerConfig.setImageLoader(new DefaultImageLoader() {
+            @Override
+            public void getImage(Context context, ImageView imageView, String Url) {
+                Picasso.with(MainActivity.this).load(Url).into(imageView);
+            }
+        });
+        //ImageViewerConfig.setChooseResIs(R.drawable.img_point_focused);
+        //ImageViewerConfig.setUnChooseResIs(R.drawable.img_point_nomal);
+    }
+
+    @Override
+    public void onChangeItem(int currentItem) {
+        Log.d("MainActivity", "onChangeItem:" + currentItem);
     }
 }

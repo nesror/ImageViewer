@@ -40,20 +40,20 @@ public class SmoothImageView extends PhotoView {
 
     public SmoothImageView(Context context) {
         super(context);
-        init();
+        initPaint();
     }
 
     public SmoothImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        initPaint();
     }
 
     public SmoothImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        initPaint();
     }
 
-    private void init() {
+    private void initPaint() {
         mSmoothMatrix = new Matrix();
         mPaint = new Paint();
         mPaint.setColor(0xFF000000);
