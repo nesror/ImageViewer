@@ -12,14 +12,14 @@ Step 1. Add the JitPack repository to your build file
 
 Step 2. Add the dependency
 ```
-	compile 'com.github.nesror:ImageViewer:[look download]'
+	compile 'com.github.nesror:ImageViewer:[look jitpack]'
 ```
 
 Use
 ----------------------------
 Step 1. 实现IImageLoader设置图片加载器，也可以使用默认实现类DefaultImageLoader()
 ```{java}
-    ImageViewer.setImageLoader(new IImageLoader() {
+    ImageViewerConfig.setImageLoader(new IImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
                 Picasso.with(MainActivity.this).load(Url).into(imageView);
@@ -42,6 +42,9 @@ Step 1. 实现IImageLoader设置图片加载器，也可以使用默认实现类
 ```
 Step 2. 使用
 ```{java}
+
+    ImageViewer imageViewer = new ImageViewer();
+
     /**
      * 打开图片浏览多张
      *
@@ -50,7 +53,7 @@ Step 2. 使用
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
-    public static void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem)
+    imageViewer.open(context, imageViews, objects, clickItem);
 ```
 * 更多方法详见Demo
 
@@ -63,6 +66,6 @@ Step 2. 使用
 
 用到的第3方lib
 ----------------------------
-* compile 'com.github.chrisbanes.photoview:library:1.2.2'
+* compile 'com.github.chrisbanes.photoview:library:1.2.4'
 * compile 'me.relex:circleindicator:1.2.1@aar'
 * 图片缩放代码参考自CocolVook/SimplifyReader
