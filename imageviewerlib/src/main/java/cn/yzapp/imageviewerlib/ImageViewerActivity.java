@@ -3,10 +3,12 @@ package cn.yzapp.imageviewerlib;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,12 +19,13 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * @author nestor
- * email nestor@yzapp.cn
+ *         email nestor@yzapp.cn
  */
 public class ImageViewerActivity extends Activity {
 
     private ShowImage mShowImage;
     private LocalBroadcastManager mLocalBroadcastManager;
+    private SamplePagerAdapter mSamplePagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,8 @@ public class ImageViewerActivity extends Activity {
         int indicatorUnselectedBackgroundId = getIntent().getIntExtra(ImageViewer.UNCHOOSE_RES_IS, 0);
         mIndicator.configureIndicator(-1, -1, -1, 0, 0, indicatorBackgroundId, indicatorUnselectedBackgroundId);
 
-        mViewPager.setAdapter(new SamplePagerAdapter());
+        mSamplePagerAdapter = new SamplePagerAdapter();
+        mViewPager.setAdapter(mSamplePagerAdapter);
         mIndicator.setViewPager(mViewPager);
 
         mViewPager.setCurrentItem(mShowImage.getIndex());
@@ -54,7 +58,10 @@ public class ImageViewerActivity extends Activity {
             @Override
             public void onPageSelected(int position) {
                 sendBroadcast(position);
-                ((SmoothImageView) mViewPager.getChildAt(position)).setScale(1);
+                SmoothImageView smoothImageView = mSamplePagerAdapter.getPhotoView(position);
+                if (smoothImageView != null) {
+                    smoothImageView.setZoomable(true);
+                }
             }
 
             @Override
@@ -117,12 +124,21 @@ public class ImageViewerActivity extends Activity {
             public void onPhotoTap(View view, float v, float v2) {
                 photoView.transformOut();
             }
+
+            @Override
+            public void onOutsidePhotoTap() {
+
+            }
         });
     }
 
     class SamplePagerAdapter extends PagerAdapter {
-
+        private SparseArray<SmoothImageView> photoViews;
         private boolean show;
+
+        public SamplePagerAdapter() {
+            photoViews = new SparseArray<>(mShowImage.getImg().size());
+        }
 
         @Override
         public int getCount() {
@@ -131,8 +147,6 @@ public class ImageViewerActivity extends Activity {
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
-
-
             SmoothImageView photoView = new SmoothImageView(container.getContext());
             setImgSite(position, photoView);
 
@@ -144,17 +158,23 @@ public class ImageViewerActivity extends Activity {
 
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
+            photoViews.put(position, photoView);
             return photoView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+            photoViews.remove(position);
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == object;
+        }
+
+        public SmoothImageView getPhotoView(int position) {
+            return photoViews.get(position);
         }
 
     }
