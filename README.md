@@ -66,6 +66,6 @@ Step 2. 使用
 
 用到的第3方lib
 ----------------------------
-* compile 'com.github.chrisbanes.photoview:library:1.2.4'
+* compile 'com.github.chrisbanes:PhotoView:1.2.6'
 * compile 'me.relex:circleindicator:1.2.1@aar'
 * 图片缩放代码参考自CocolVook/SimplifyReader
