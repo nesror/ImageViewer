@@ -90,6 +90,7 @@ public class ImageViewerActivity extends Activity {
     protected void onDestroy() {
         Intent intent = new Intent();
         intent.setAction(ImageViewer.BROADCAST_ACTION);
+        intent.putExtra("position", -1);
         intent.putExtra("onDestroy", true);
         mLocalBroadcastManager.sendBroadcast(intent);
 
