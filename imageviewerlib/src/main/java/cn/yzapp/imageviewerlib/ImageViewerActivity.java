@@ -60,7 +60,7 @@ public class ImageViewerActivity extends Activity {
                 sendBroadcast(position);
                 SmoothImageView smoothImageView = mSamplePagerAdapter.getPhotoView(position);
                 if (smoothImageView != null) {
-                    smoothImageView.setZoomable(true);
+                    smoothImageView.setScale(1.0f);
                 }
             }
 

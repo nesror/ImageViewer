@@ -28,6 +28,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile project(':imageviewerlib')
-    //compile 'com.github.nesror:ImageViewer:0.0.2'
+//    compile ('com.github.nesror:ImageViewer:0.2.2')
+//            {
+//                exclude group: 'com.android.support'
+//            }
     compile 'com.squareup.picasso:picasso:2.5.2'
 }
