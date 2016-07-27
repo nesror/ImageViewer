@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
@@ -19,12 +18,11 @@ import uk.co.senab.photoview.PhotoView;
 
 /**
  * 基于 @author Dean Tao 的SmoothImageView修改而来
- *
+ * <p/>
  * 原注释：
  * 2d平滑变化的显示图片的ImageView
  * 仅限于用于:从一个ScaleType==CENTER_CROP的ImageView，切换到另一个ScaleType=
  * FIT_CENTER的ImageView，或者反之 (当然，得使用同样的图片最好)
- *
  */
 public class SmoothImageView extends PhotoView {
 
@@ -40,8 +38,6 @@ public class SmoothImageView extends PhotoView {
     private Bitmap mBitmap;
     private boolean mTransformStart = false;
     private Transfrom mTransfrom;
-    private int mBgAlpha = 0;
-    private Paint mPaint;
 
     public SmoothImageView(Context context) {
         super(context);
@@ -60,9 +56,6 @@ public class SmoothImageView extends PhotoView {
 
     private void initPaint() {
         mSmoothMatrix = new Matrix();
-        mPaint = new Paint();
-        mPaint.setColor(0xFF000000);
-        mPaint.setStyle(Paint.Style.FILL);
     }
 
     public void setOriginalInfo(int width, int height, int locationX, int locationY) {
@@ -85,7 +78,6 @@ public class SmoothImageView extends PhotoView {
      * 用于开始退出的方法。 调用此方前，需已经调用过setOriginalInfo
      */
     public void transformOut() {
-        mBgAlpha = 255;
         mState = STATE_TRANSFORM_OUT;
         mTransformStart = true;
         invalidate();
@@ -164,7 +156,7 @@ public class SmoothImageView extends PhotoView {
         mTransfrom.startRect.top = mOriginalLocationY;
         mTransfrom.startRect.width = mOriginalWidth;
         mTransfrom.startRect.height = mOriginalHeight;
-		/* 结束区域 */
+        /* 结束区域 */
         mTransfrom.endRect = new LocationSizeF();
         float bitmapEndWidth = mBitmap.getWidth() * mTransfrom.endScale;// 图片最终的宽度
         float bitmapEndHeight = mBitmap.getHeight() * mTransfrom.endScale;// 图片最终的宽度
@@ -242,9 +234,6 @@ public class SmoothImageView extends PhotoView {
                 Log.d("SmoothImageView", "mTransfrom.rect:" + mTransfrom.rect.toString());
             }
 
-            mPaint.setAlpha(mBgAlpha);
-            canvas.drawPaint(mPaint);
-
             int saveCount = canvas.getSaveCount();
             canvas.save();
             // 先得到图片在此刻的图像Matrix矩阵
@@ -259,9 +248,6 @@ public class SmoothImageView extends PhotoView {
                 startTransform(mState);
             }
         } else {
-            //当Transform In变化完成后，把背景改为黑色，使得Activity不透明
-            mPaint.setAlpha(255);
-            canvas.drawPaint(mPaint);
             super.onDraw(canvas);
         }
     }
@@ -271,7 +257,7 @@ public class SmoothImageView extends PhotoView {
             return;
         }
         ValueAnimator valueAnimator = new ValueAnimator();
-        valueAnimator.setDuration(300);
+        valueAnimator.setDuration(380);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (state == STATE_TRANSFORM_IN) {
             PropertyValuesHolder scaleHolder = PropertyValuesHolder.ofFloat("scale", mTransfrom.startScale, mTransfrom.endScale);
@@ -279,16 +265,14 @@ public class SmoothImageView extends PhotoView {
             PropertyValuesHolder topHolder = PropertyValuesHolder.ofFloat("top", mTransfrom.startRect.top, mTransfrom.endRect.top);
             PropertyValuesHolder widthHolder = PropertyValuesHolder.ofFloat("width", mTransfrom.startRect.width, mTransfrom.endRect.width);
             PropertyValuesHolder heightHolder = PropertyValuesHolder.ofFloat("height", mTransfrom.startRect.height, mTransfrom.endRect.height);
-            PropertyValuesHolder alphaHolder = PropertyValuesHolder.ofInt("alpha", 0, 255);
-            valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder, alphaHolder);
+            valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder);
         } else {
             PropertyValuesHolder scaleHolder = PropertyValuesHolder.ofFloat("scale", mTransfrom.endScale, mTransfrom.startScale);
             PropertyValuesHolder leftHolder = PropertyValuesHolder.ofFloat("left", mTransfrom.endRect.left, mTransfrom.startRect.left);
             PropertyValuesHolder topHolder = PropertyValuesHolder.ofFloat("top", mTransfrom.endRect.top, mTransfrom.startRect.top);
             PropertyValuesHolder widthHolder = PropertyValuesHolder.ofFloat("width", mTransfrom.endRect.width, mTransfrom.startRect.width);
             PropertyValuesHolder heightHolder = PropertyValuesHolder.ofFloat("height", mTransfrom.endRect.height, mTransfrom.startRect.height);
-            PropertyValuesHolder alphaHolder = PropertyValuesHolder.ofInt("alpha", 255, 0);
-            valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder, alphaHolder);
+            valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder);
         }
 
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -299,7 +283,6 @@ public class SmoothImageView extends PhotoView {
                 mTransfrom.rect.top = (Float) animation.getAnimatedValue("top");
                 mTransfrom.rect.width = (Float) animation.getAnimatedValue("width");
                 mTransfrom.rect.height = (Float) animation.getAnimatedValue("height");
-                mBgAlpha = (Integer) animation.getAnimatedValue("alpha");
                 invalidate();
                 ((Activity) getContext()).getWindow().getDecorView().invalidate();
             }

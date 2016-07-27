@@ -1,9 +1,9 @@
 package cn.yzapp.imageviewerlib;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
@@ -11,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.RelativeLayout;
 
 import java.io.File;
 
@@ -26,6 +28,7 @@ public class ImageViewerActivity extends Activity {
     private ShowImage mShowImage;
     private LocalBroadcastManager mLocalBroadcastManager;
     private SamplePagerAdapter mSamplePagerAdapter;
+    private RelativeLayout root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class ImageViewerActivity extends Activity {
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         setContentView(R.layout.activity_image_viewer);
+        root = (RelativeLayout) findViewById(R.id.root);
         final HackyViewPager mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         CircleIndicator mIndicator = (CircleIndicator) findViewById(R.id.indicator);
 
@@ -69,6 +73,24 @@ public class ImageViewerActivity extends Activity {
             }
         });
 
+        setOpenAnimator();
+
+    }
+
+    private void setOpenAnimator() {
+        // 进度动画
+        ValueAnimator animator = ValueAnimator.ofInt(0, 0xFF);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int progress = (int) animation.getAnimatedValue();
+                root.setBackgroundColor(progress * 0x1000000);
+            }
+        });
+        // 设置插值器为均速滚动
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(380);
+        animator.start();
     }
 
     private void sendBroadcast(int position) {
@@ -124,6 +146,8 @@ public class ImageViewerActivity extends Activity {
             @Override
             public void onPhotoTap(View view, float v, float v2) {
                 photoView.transformOut();
+                setCloseAnimator();
+
             }
 
             @Override
@@ -131,6 +155,22 @@ public class ImageViewerActivity extends Activity {
 
             }
         });
+    }
+
+    private void setCloseAnimator() {
+        // 进度动画
+        ValueAnimator animator = ValueAnimator.ofInt(0xFF, 0);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int progress = (int) animation.getAnimatedValue();
+                root.setBackgroundColor(progress * 0x1000000);
+            }
+        });
+        // 设置插值器为均速滚动
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(380);
+        animator.start();
     }
 
     class SamplePagerAdapter extends PagerAdapter {
