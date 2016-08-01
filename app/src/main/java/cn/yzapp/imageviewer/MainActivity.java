@@ -19,6 +19,7 @@ import cn.yzapp.imageviewerlib.ImageViewer;
 import cn.yzapp.imageviewerlib.ImageViewerConfig;
 import cn.yzapp.imageviewerlib.Utils;
 
+@Deprecated
 public class MainActivity extends AppCompatActivity implements ImageViewer.OnImageViewerListener {
 
     @Override

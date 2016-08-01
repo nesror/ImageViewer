@@ -38,21 +38,24 @@ public class ImageViewerActivity extends Activity {
 
         setContentView(R.layout.activity_image_viewer);
         root = (RelativeLayout) findViewById(R.id.root);
-        final HackyViewPager mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
-        CircleIndicator mIndicator = (CircleIndicator) findViewById(R.id.indicator);
 
         mShowImage = getIntent().getParcelableExtra(ImageViewer.INTENT_IMAGE);
 
-        int indicatorBackgroundId = getIntent().getIntExtra(ImageViewer.CHOOSE_RES_IS, 0);
-        int indicatorUnselectedBackgroundId = getIntent().getIntExtra(ImageViewer.UNCHOOSE_RES_IS, 0);
-        mIndicator.configureIndicator(-1, -1, -1, 0, 0, indicatorBackgroundId, indicatorUnselectedBackgroundId);
+        setViewPage();
+
+        setOpenAnimator();
+
+    }
+
+    private void setViewPage() {
+        final HackyViewPager mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 
         mSamplePagerAdapter = new SamplePagerAdapter();
         mViewPager.setAdapter(mSamplePagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+
+        setCircleIndicator(mViewPager);
 
         mViewPager.setCurrentItem(mShowImage.getIndex());
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -72,9 +75,18 @@ public class ImageViewerActivity extends Activity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
 
-        setOpenAnimator();
+    private void setCircleIndicator(HackyViewPager mViewPager) {
+        CircleIndicator mIndicator = (CircleIndicator) findViewById(R.id.indicator);
+        int indicatorBackgroundId = getIntent().getIntExtra(ImageViewer.CHOOSE_RES_IS, 0);
+        int indicatorUnselectedBackgroundId = getIntent().getIntExtra(ImageViewer.UNCHOOSE_RES_IS, 0);
+        mIndicator.configureIndicator(-1, -1, -1, 0, 0, indicatorBackgroundId, indicatorUnselectedBackgroundId);
 
+        if(mShowImage.getImg().size() > 1){
+            mIndicator.setVisibility(View.VISIBLE);
+            mIndicator.setViewPager(mViewPager);
+        }
     }
 
     private void setOpenAnimator() {
@@ -152,7 +164,8 @@ public class ImageViewerActivity extends Activity {
 
             @Override
             public void onOutsidePhotoTap() {
-
+                photoView.transformOut();
+                setCloseAnimator();
             }
         });
     }

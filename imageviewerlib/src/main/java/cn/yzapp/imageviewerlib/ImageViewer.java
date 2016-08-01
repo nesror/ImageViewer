@@ -137,8 +137,8 @@ public class ImageViewer {
             int[] size = new int[4];
             if (sizeFirst) {
                 imageViews.get(clickItem).getLocationOnScreen(location);
-                int width = imageView.getWidth();
-                int height = imageView.getHeight();
+                int width = imageViews.get(clickItem).getWidth();
+                int height = imageViews.get(clickItem).getHeight();
 
                 size[0] = width;
                 size[1] = height;
