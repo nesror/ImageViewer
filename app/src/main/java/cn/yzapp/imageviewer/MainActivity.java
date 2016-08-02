@@ -20,7 +20,7 @@ import cn.yzapp.imageviewerlib.ImageViewerConfig;
 import cn.yzapp.imageviewerlib.Utils;
 
 @Deprecated
-public class MainActivity extends AppCompatActivity implements ImageViewer.OnImageViewerListener {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements ImageViewer.OnIma
 
     private void initView() {
 
-        final ImageViewer imageViewer = new ImageViewer(this);
+        final ImageViewer imageViewer = new ImageViewer();
 
         GridLayout layout = (GridLayout) findViewById(R.id.layout);
 
@@ -96,8 +96,4 @@ public class MainActivity extends AppCompatActivity implements ImageViewer.OnIma
         //ImageViewerConfig.setUnChooseResIs(R.drawable.img_point_nomal);
     }
 
-    @Override
-    public void onChangeItem(int currentItem) {
-        Log.d("MainActivity", "onChangeItem:" + currentItem);
-    }
 }

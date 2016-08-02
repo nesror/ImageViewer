@@ -28,7 +28,7 @@ import me.relex.circleindicator.CircleIndicator;
  * Use the {@link ViewPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewPageFragment extends Fragment implements ImageViewer.OnImageViewerListener {
+public class ViewPageFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ViewPager mViewPager;
@@ -78,7 +78,7 @@ public class ViewPageFragment extends Fragment implements ImageViewer.OnImageVie
     }
 
     private void initAdapter() {
-        final ImageViewer imageViewer = new ImageViewer(this);
+        final ImageViewer imageViewer = new ImageViewer();
 
         if (mImageList != null && mImageList.size() > 0) {
             mImageList.clear();
@@ -98,6 +98,8 @@ public class ViewPageFragment extends Fragment implements ImageViewer.OnImageVie
         MyPagerAdapter adapter = new MyPagerAdapter();
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(0);
+
+        imageViewer.setViewPager(mViewPager);
 
         mIndicator.setViewPager(mViewPager);
     }
@@ -124,11 +126,6 @@ public class ViewPageFragment extends Fragment implements ImageViewer.OnImageVie
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onChangeItem(int currentItem) {
-        mViewPager.setCurrentItem(currentItem);
     }
 
     /**

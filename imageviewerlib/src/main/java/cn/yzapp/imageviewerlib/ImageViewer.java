@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 
 /**
  * @author nestor
- * email nestor@yzapp.cn
+ *         email nestor@yzapp.cn
  */
 public class ImageViewer {
     public static final String BROADCAST_ACTION = "com.github.nesror:ImageViewer";
@@ -23,32 +24,15 @@ public class ImageViewer {
     public static final String CHOOSE_RES_IS = "CHOOSE_RES_IS";
     public static final String UNCHOOSE_RES_IS = "UNCHOOSE_RES_IS";
 
-    private static OnChangeItemListener mChangeItemListener;
-    private static ImageViewerBroadcastReceiver mBroadcastReceiver;
+    private OnChangeItemListener mChangeItemListener;
+    private ImageViewerBroadcastReceiver mBroadcastReceiver;
     private LocalBroadcastManager mLocalBroadcastManager;
 
-    private static int mChooseResIs;
-    private static int mUnChooseResIs;
+    private int mChooseResIs;
+    private int mUnChooseResIs;
 
     public ImageViewer() {
         initRes();
-    }
-
-    public ImageViewer(final OnImageViewerListener changeItemListener) {
-        initRes();
-
-        mChangeItemListener = new OnChangeItemListener() {
-            @Override
-            public void onChangeItem(int currentItem) {
-                changeItemListener.onChangeItem(currentItem);
-            }
-
-            @Override
-            public void onDestroy() {
-                if (mLocalBroadcastManager != null)
-                    mLocalBroadcastManager.unregisterReceiver(mBroadcastReceiver);
-            }
-        };
     }
 
     private void initRes() {
@@ -66,15 +50,33 @@ public class ImageViewer {
     /**
      * 设置当前ImageViewer选中时的指示器颜色
      */
-    public static void setChooseResIs(@DrawableRes int chooseResIs) {
+    public void setChooseResIs(@DrawableRes int chooseResIs) {
         mChooseResIs = chooseResIs;
     }
 
     /**
      * 设置当前ImageViewer未选中时的指示器颜色
      */
-    public static void setUnChooseResIs(@DrawableRes int unChooseResIs) {
+    public void setUnChooseResIs(@DrawableRes int unChooseResIs) {
         mUnChooseResIs = unChooseResIs;
+    }
+
+    /**
+     * 关联 viewPager
+     */
+    public void setViewPager(final ViewPager viewPager) {
+        mChangeItemListener = new OnChangeItemListener() {
+            @Override
+            public void onChangeItem(int currentItem) {
+                viewPager.setCurrentItem(currentItem);
+            }
+
+            @Override
+            public void onDestroy() {
+                if (mLocalBroadcastManager != null)
+                    mLocalBroadcastManager.unregisterReceiver(mBroadcastReceiver);
+            }
+        };
     }
 
     /**
@@ -202,9 +204,5 @@ public class ImageViewer {
         void onChangeItem(int currentItem);
 
         void onDestroy();
-    }
-
-    public interface OnImageViewerListener {
-        void onChangeItem(int currentItem);
     }
 }

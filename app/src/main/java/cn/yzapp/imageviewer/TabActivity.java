@@ -1,6 +1,7 @@
 package cn.yzapp.imageviewer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -65,8 +66,8 @@ public class TabActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/nesror/ImageViewer")));
+
             }
         });
 
@@ -88,7 +89,8 @@ public class TabActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://blog.yzapp.cn")));
             return true;
         }
 
@@ -139,11 +141,11 @@ public class TabActivity extends AppCompatActivity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "ViewPage";
+                    return "关联ViewPage";
                 case 1:
-                    return "Grid";
+                    return "仿微信";
                 case 2:
-                    return "List";
+                    return "列表";
             }
             return null;
         }
