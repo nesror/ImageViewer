@@ -1,5 +1,5 @@
 # ImageViewer
-![image](img/img1.gif)
+![image](img/img1.gif)![image](img/img2.jpg)
 
 Add ImageViewer to your project
 ----------------------------
