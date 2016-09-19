@@ -63,6 +63,7 @@ public class SmoothImageView extends PhotoView {
         mOriginalHeight = height;
         mOriginalLocationX = locationX;
         mOriginalLocationY = locationY;
+        mOriginalLocationY = mOriginalLocationY - Utils.getStatusBarHeight(getContext());
     }
 
     /**
