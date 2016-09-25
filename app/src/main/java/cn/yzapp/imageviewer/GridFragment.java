@@ -83,7 +83,7 @@ public class GridFragment extends Fragment{
 
         GridLayout layout = (GridLayout) root.findViewById(R.id.grid_layout);
 
-        int width = Utils.getScreenWidth(getContext()) / 3;
+        int width = Utils.INSTANCE.getScreenWidth(getContext()) / 3;
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, width);
 
         final List<ImageView> imgs = new ArrayList<>();

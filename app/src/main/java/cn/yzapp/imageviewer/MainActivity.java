@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         GridLayout layout = (GridLayout) findViewById(R.id.layout);
 
-        int width = (Utils.getScreenWidth(this) - Utils.dip2px(this, 32)) / 3;
+        int width = (Utils.INSTANCE.getScreenWidth(this) - Utils.INSTANCE.dip2px(this, 32)) / 3;
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, width);
 
         final ArrayList<Object> urlList = new ArrayList<>();

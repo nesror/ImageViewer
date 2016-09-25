@@ -65,8 +65,8 @@ class ImageViewer {
             }
 
             override fun onDestroy() {
-                if (mLocalBroadcastManager != null)
-                    mLocalBroadcastManager!!.unregisterReceiver(mBroadcastReceiver)
+                if (mBroadcastReceiver != null)
+                    mLocalBroadcastManager?.unregisterReceiver(mBroadcastReceiver)
             }
         }
     }
@@ -196,7 +196,7 @@ class ImageViewer {
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(context)
 
-        mBroadcastReceiver = ImageViewerBroadcastReceiver(mChangeItemListener)
+        mBroadcastReceiver = ImageViewerBroadcastReceiver(mChangeItemListener!!)
         val intentFilter = IntentFilter()
         intentFilter.addAction(BROADCAST_ACTION)
         mLocalBroadcastManager!!.registerReceiver(mBroadcastReceiver, intentFilter)

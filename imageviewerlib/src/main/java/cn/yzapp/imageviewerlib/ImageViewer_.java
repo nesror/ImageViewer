@@ -17,6 +17,7 @@ import java.util.List;
  * @author nestor
  *         email nestor@yzapp.cn
  */
+@Deprecated
 public class ImageViewer_ {
     /*public static final String BROADCAST_ACTION = "com.github.nesror:ImageViewer";
 

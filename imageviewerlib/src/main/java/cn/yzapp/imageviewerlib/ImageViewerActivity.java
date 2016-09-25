@@ -23,6 +23,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * @author nestor
  *         email nestor@yzapp.cn
  */
+@Deprecated
 public class ImageViewerActivity extends Activity {
 
     private ImageInfo mShowImage;
@@ -246,8 +247,8 @@ public class ImageViewerActivity extends Activity {
             photoView.setOriginalInfo(
                     0,
                     0,
-                    Utils.getScreenWidth(ImageViewerActivity.this) / 2,
-                    Utils.getScreenHeight(ImageViewerActivity.this) / 2);
+                    Utils.INSTANCE.getScreenWidth(ImageViewerActivity.this) / 2,
+                    Utils.INSTANCE.getScreenHeight(ImageViewerActivity.this) / 2);
         } else {
             photoView.setOriginalInfo(
                     size[0],
