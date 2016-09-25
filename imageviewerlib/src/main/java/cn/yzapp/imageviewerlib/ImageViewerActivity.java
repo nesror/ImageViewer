@@ -39,7 +39,7 @@ public class ImageViewerActivity extends Activity {
         setContentView(R.layout.activity_image_viewer);
         root = (RelativeLayout) findViewById(R.id.root);
 
-        mShowImage = getIntent().getParcelableExtra(ImageViewer.INTENT_IMAGE);
+        mShowImage = getIntent().getParcelableExtra(ImageViewer.Companion.getINTENT_IMAGE());
 
         setViewPage();
 
@@ -79,8 +79,8 @@ public class ImageViewerActivity extends Activity {
 
     private void setCircleIndicator(HackyViewPager mViewPager) {
         CircleIndicator mIndicator = (CircleIndicator) findViewById(R.id.indicator);
-        int indicatorBackgroundId = getIntent().getIntExtra(ImageViewer.CHOOSE_RES_IS, 0);
-        int indicatorUnselectedBackgroundId = getIntent().getIntExtra(ImageViewer.UNCHOOSE_RES_IS, 0);
+        int indicatorBackgroundId = getIntent().getIntExtra(ImageViewer.Companion.getCHOOSE_RES_IS(), 0);
+        int indicatorUnselectedBackgroundId = getIntent().getIntExtra(ImageViewer.Companion.getUNCHOOSE_RES_IS(), 0);
         mIndicator.configureIndicator(-1, -1, -1, 0, 0, indicatorBackgroundId, indicatorUnselectedBackgroundId);
 
         if(mShowImage.getImg().size() > 1){
@@ -107,7 +107,7 @@ public class ImageViewerActivity extends Activity {
 
     private void sendBroadcast(int position) {
         Intent intent = new Intent();
-        intent.setAction(ImageViewer.BROADCAST_ACTION);
+        intent.setAction(ImageViewer.Companion.getBROADCAST_ACTION());
         intent.putExtra("position", position);
         mLocalBroadcastManager.sendBroadcast(intent);
     }
@@ -123,7 +123,7 @@ public class ImageViewerActivity extends Activity {
     @Override
     protected void onDestroy() {
         Intent intent = new Intent();
-        intent.setAction(ImageViewer.BROADCAST_ACTION);
+        intent.setAction(ImageViewer.Companion.getBROADCAST_ACTION());
         intent.putExtra("position", -1);
         intent.putExtra("onDestroy", true);
         mLocalBroadcastManager.sendBroadcast(intent);
@@ -133,16 +133,16 @@ public class ImageViewerActivity extends Activity {
 
     private void setPhotoView(final SmoothImageView photoView, Object img) {
         if (img instanceof String) {
-            ImageViewerConfig.getImageLoader().getImage(this, photoView, (String) img);
+            ImageViewerConfig.INSTANCE.getImageLoader().getImage(this, photoView, (String) img);
         }
         if (img instanceof Integer) {
-            ImageViewerConfig.getImageLoader().getImage(this, photoView, (int) img);
+            ImageViewerConfig.INSTANCE.getImageLoader().getImage(this, photoView, (int) img);
         }
         if (img instanceof File) {
-            ImageViewerConfig.getImageLoader().getImage(this, photoView, (File) img);
+            ImageViewerConfig.INSTANCE.getImageLoader().getImage(this, photoView, (File) img);
         }
         if (img instanceof Bitmap) {
-            ImageViewerConfig.getImageLoader().getImage(this, photoView, (Bitmap) img);
+            ImageViewerConfig.INSTANCE.getImageLoader().getImage(this, photoView, (Bitmap) img);
         }
 
         photoView.setOnTransformListener(new SmoothImageView.TransformListener() {

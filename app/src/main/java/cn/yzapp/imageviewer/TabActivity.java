@@ -155,7 +155,7 @@ public class TabActivity extends AppCompatActivity
      * ImageViewer的全局设置
      */
     private void setImagerViewerConfig() {
-        ImageViewerConfig.setImageLoader(new DefaultImageLoader() {
+        ImageViewerConfig.INSTANCE.setImageLoader(new DefaultImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
                 Picasso.with(TabActivity.this).load(Url).into(imageView);

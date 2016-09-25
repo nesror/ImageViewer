@@ -17,8 +17,8 @@ import java.util.List;
  * @author nestor
  *         email nestor@yzapp.cn
  */
-public class ImageViewer {
-    public static final String BROADCAST_ACTION = "com.github.nesror:ImageViewer";
+public class ImageViewer_ {
+    /*public static final String BROADCAST_ACTION = "com.github.nesror:ImageViewer";
 
     public static final String INTENT_IMAGE = "INTENT_IMAGE";
     public static final String CHOOSE_RES_IS = "CHOOSE_RES_IS";
@@ -31,7 +31,7 @@ public class ImageViewer {
     private int mChooseResIs;
     private int mUnChooseResIs;
 
-    public ImageViewer() {
+    public ImageViewer_() {
         initRes();
     }
 
@@ -40,30 +40,30 @@ public class ImageViewer {
         mUnChooseResIs = ImageViewerConfig.getUnChooseResIs();
     }
 
-    /**
+    *//**
      * 清除当前ImageViewer选中的图片的监听
-     */
+     *//*
     public void cleanOnChangeItemListener() {
         mChangeItemListener = null;
     }
 
-    /**
+    *//**
      * 设置当前ImageViewer选中时的指示器颜色
-     */
+     *//*
     public void setChooseResIs(@DrawableRes int chooseResIs) {
         mChooseResIs = chooseResIs;
     }
 
-    /**
+    *//**
      * 设置当前ImageViewer未选中时的指示器颜色
-     */
+     *//*
     public void setUnChooseResIs(@DrawableRes int unChooseResIs) {
         mUnChooseResIs = unChooseResIs;
     }
 
-    /**
+    *//**
      * 关联 viewPager
-     */
+     *//*
     public void setViewPager(final ViewPager viewPager) {
         mChangeItemListener = new OnChangeItemListener() {
             @Override
@@ -79,13 +79,13 @@ public class ImageViewer {
         };
     }
 
-    /**
+    *//**
      * 打开图片浏览单张
      *
      * @param context   Context
      * @param imageView ImageView
      * @param object    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
-     */
+     *//*
     public void open(Context context, ImageView imageView, Object object) {
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(object);
@@ -96,31 +96,31 @@ public class ImageViewer {
         open(context, imageViews, objects, 0);
     }
 
-    /**
+    *//**
      * 打开图片浏览多张
      *
      * @param context    Context
      * @param imageViews ImageView
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
-     */
+     *//*
     public void open(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
         openImageViewer(context, imageViews, objects, clickItem, false);
     }
 
-    /**
+    *//**
      * 打开图片浏览多张,只根据第一张图片来播放动画
      *
      * @param context    Context
      * @param imageViews ImageView
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
-     */
+     *//*
     public void openWithChoose(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem) {
         openImageViewer(context, imageViews, objects, clickItem, true);
     }
 
-    /**
+    *//**
      * 打开图片浏览多张
      *
      * @param context    Context
@@ -128,7 +128,7 @@ public class ImageViewer {
      * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      * @param sizeFirst  只根据第一张图片来播放动画
-     */
+     *//*
     private void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem, boolean sizeFirst) {
         final ImageInfo showImage = new ImageInfo(new ArrayList<int[]>(), 0, new ArrayList<>());
         showImage.setImg(objects);
@@ -204,5 +204,5 @@ public class ImageViewer {
         void onChangeItem(int currentItem);
 
         void onDestroy();
-    }
+    }*/
 }
