@@ -18,6 +18,13 @@ import java.util.ArrayList
  */
 class ImageViewer {
 
+    companion object {
+        val BROADCAST_ACTION = "com.github.nesror:ImageViewer"
+        val INTENT_IMAGE = "INTENT_IMAGE"
+        val CHOOSE_RES_IS = "CHOOSE_RES_IS"
+        val UNCHOOSE_RES_IS = "UNCHOOSE_RES_IS"
+    }
+
     private var mChangeItemListener: OnChangeItemListener? = null
     private var mBroadcastReceiver: ImageViewerBroadcastReceiver? = null
     private var mLocalBroadcastManager: LocalBroadcastManager? = null
@@ -210,11 +217,4 @@ class ImageViewer {
         fun onDestroy()
     }
 
-    companion object {
-        val BROADCAST_ACTION = "com.github.nesror:ImageViewer"
-
-        val INTENT_IMAGE = "INTENT_IMAGE"
-        val CHOOSE_RES_IS = "CHOOSE_RES_IS"
-        val UNCHOOSE_RES_IS = "UNCHOOSE_RES_IS"
-    }
 }
