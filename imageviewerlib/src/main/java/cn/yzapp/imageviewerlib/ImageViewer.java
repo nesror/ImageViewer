@@ -130,7 +130,7 @@ public class ImageViewer {
      * @param sizeFirst  只根据第一张图片来播放动画
      */
     private void openImageViewer(Context context, List<ImageView> imageViews, ArrayList<Object> objects, int clickItem, boolean sizeFirst) {
-        final ShowImage showImage = new ShowImage();
+        final ImageInfo showImage = new ImageInfo(new ArrayList<int[]>(), 0, new ArrayList<>());
         showImage.setImg(objects);
 
         List<int[]> sizes = new ArrayList<>();
@@ -139,8 +139,8 @@ public class ImageViewer {
             int[] size = new int[4];
             if (sizeFirst) {
                 imageViews.get(clickItem).getLocationOnScreen(location);
-                int width = imageViews.get(clickItem).getWidth();
-                int height = imageViews.get(clickItem).getHeight();
+                Integer width = imageViews.get(clickItem).getWidth();
+                Integer height = imageViews.get(clickItem).getHeight();
 
                 size[0] = width;
                 size[1] = height;
@@ -148,8 +148,8 @@ public class ImageViewer {
                 size[3] = location[1];
             } else {
                 imageView.getLocationOnScreen(location);
-                int width = imageView.getWidth();
-                int height = imageView.getHeight();
+                Integer width = imageView.getWidth();
+                Integer height = imageView.getHeight();
 
                 size[0] = width;
                 size[1] = height;
@@ -166,7 +166,7 @@ public class ImageViewer {
         openImageViewer(context, showImage);
     }
 
-    private void openImageViewer(Context context, ShowImage showImage) {
+    private void openImageViewer(Context context, ImageInfo showImage) {
         if (ImageViewerConfig.getImageLoader() == null) {
             return;
         }
@@ -176,7 +176,7 @@ public class ImageViewer {
         startActivity(context, showImage);
     }
 
-    private void startActivity(Context context, ShowImage showImage) {
+    private void startActivity(Context context, ImageInfo showImage) {
         Bundle extras = new Bundle();
         extras.putParcelable(INTENT_IMAGE, showImage);
         extras.putInt(CHOOSE_RES_IS, mChooseResIs);

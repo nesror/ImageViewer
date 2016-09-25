@@ -25,7 +25,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class ImageViewerActivity extends Activity {
 
-    private ShowImage mShowImage;
+    private ImageInfo mShowImage;
     private LocalBroadcastManager mLocalBroadcastManager;
     private SamplePagerAdapter mSamplePagerAdapter;
     private RelativeLayout root;

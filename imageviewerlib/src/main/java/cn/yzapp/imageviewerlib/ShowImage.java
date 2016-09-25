@@ -10,6 +10,7 @@ import java.util.List;
  * @author nestor
  * email nestor@yzapp.cn
  */
+@Deprecated
 public class ShowImage implements Parcelable {
     private List<int[]> sizes;
 
