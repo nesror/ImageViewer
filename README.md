@@ -18,32 +18,23 @@ Step 2. Add the dependency
 Use
 ----------------------------
 Step 1. 实现IImageLoader设置图片加载器，也可以使用默认实现类DefaultImageLoader()
-```{java}
-    ImageViewerConfig.setImageLoader(new IImageLoader() {
+```{Kotlin}
+    ImageViewerConfig.imageLoader = object : DefaultImageLoader() {
+            override fun getImage(context: Context, imageView: ImageView, Url: String) {
+                Picasso.with(this@TabActivity).load(Url).into(imageView)
+            }
+        }
+````
+````{java}
+    ImageViewerConfig.INSTANCE.setImageLoader(new DefaultImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
-                Picasso.with(MainActivity.this).load(Url).into(imageView);
+                Picasso.with(TabActivity.this).load(Url).into(imageView);
             }
-
-            @Override
-            public void getImage(Context context, ImageView imageView, File file) {
-
-            }
-
-            @Override
-            public void getImage(Context context, ImageView imageView, @DrawableRes int res) {
-
-            }
-
-            @Override
-            public void getImage(Context context, ImageView imageView, Bitmap bitmap) {
-
         });
-```
+````
 Step 2. 使用
 ```{java}
-
-    ImageViewer imageViewer = new ImageViewer();
 
     /**
      * 打开图片浏览多张
@@ -66,6 +57,5 @@ Step 2. 使用
 
 用到的第3方lib
 ----------------------------
-* compile 'com.github.chrisbanes:PhotoView:1.2.6'
+* compile 'com.github.chrisbanes:PhotoView:1.3.0'
 * compile 'me.relex:circleindicator:1.2.1@aar'
-* 图片缩放代码参考自CocolVook/SimplifyReader
