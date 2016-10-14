@@ -57,7 +57,7 @@ class SmoothImageView : PhotoView {
         mOriginalHeight = height
         mOriginalLocationX = locationX
         mOriginalLocationY = locationY
-        mOriginalLocationY = mOriginalLocationY - Utils.getStatusBarHeight(context)
+        mOriginalLocationY -= Utils.getStatusBarHeight(context)
     }
 
     /**
