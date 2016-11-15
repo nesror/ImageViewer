@@ -19,6 +19,8 @@ import java.util.List;
 import cn.yzapp.imageviewerlib.ImageViewer;
 import me.relex.circleindicator.CircleIndicator;
 
+import static java.security.AccessController.getContext;
+
 
 /**
  * A simple {@link Fragment} subclass.
