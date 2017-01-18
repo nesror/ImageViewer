@@ -8,8 +8,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.graphics.PixelFormat
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -121,7 +123,7 @@ class SmoothImageView : PhotoView {
         if (drawable is ColorDrawable) return
 
         if (mBitmap == null || mBitmap!!.isRecycled) {
-            mBitmap = (drawable as BitmapDrawable).bitmap
+            mBitmap = drawableToBitamp(drawable)
         }
         //防止mTransfrom重复的做同样的初始化
         if (mTransform != null) {
@@ -164,6 +166,22 @@ class SmoothImageView : PhotoView {
         mTransform!!.endRect!!.height = bitmapEndHeight
 
         mTransform!!.rect = LocationSizeF()
+    }
+
+    private fun drawableToBitamp(drawable: Drawable): Bitmap {
+        val w = drawable.intrinsicWidth
+        val h = drawable.intrinsicHeight
+        val config = if (drawable.opacity != PixelFormat.OPAQUE)
+            Bitmap.Config.ARGB_8888
+        else
+            Bitmap.Config.RGB_565
+        val bitmap = Bitmap.createBitmap(w, h, config)
+        //注意，下面三行代码要用到，否在在View或者surfaceview里的canvas.drawBitmap会看不到图
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, w, h)
+        drawable.draw(canvas)
+
+        return bitmap
     }
 
     private inner class LocationSizeF : Cloneable {

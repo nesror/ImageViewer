@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import cn.yzapp.imageviewer.dummy.DummyContent;
 import cn.yzapp.imageviewerlib.DefaultImageLoader;
@@ -158,7 +157,7 @@ public class TabActivity extends AppCompatActivity
         ImageViewerConfig.INSTANCE.setImageLoader(new DefaultImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
-                Picasso.with(TabActivity.this).load(Url).into(imageView);
+                Glide.with(TabActivity.this).load(Url).into(imageView);
             }
         });
         //ImageViewerConfig.setChooseResIs(R.drawable.img_point_focused);
