@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.yzapp.imageviewerlib.DefaultImageLoader;
+import cn.yzapp.imageviewerlib.SimpleImageLoader;
 import cn.yzapp.imageviewerlib.ImageViewer;
 import cn.yzapp.imageviewerlib.ImageViewerConfig;
 import cn.yzapp.imageviewerlib.Utils;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
      * ImageViewer的全局设置
      */
     private void setImagerViewerConfig() {
-        ImageViewerConfig.INSTANCE.setImageLoader(new DefaultImageLoader() {
+        ImageViewerConfig.INSTANCE.setImageLoader(new SimpleImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
                 Glide.with(MainActivity.this).load(Url).into(imageView);

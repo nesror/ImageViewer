@@ -84,16 +84,16 @@ class ImageViewer {
      * *
      * @param imageView ImageView
      * *
-     * @param object    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param any    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      */
-    fun open(context: Context, imageView: ImageView, `object`: Any) {
-        val objects = ArrayList<Any>()
-        objects.add(`object`)
+    fun open(context: Context, imageView: ImageView, any: Any) {
+        val anyList = ArrayList<Any>()
+        anyList.add(any)
 
         val imageViews = ArrayList<ImageView>()
         imageViews.add(imageView)
 
-        open(context, imageViews, objects, 0)
+        open(context, imageViews, anyList, 0)
     }
 
     /**
@@ -103,12 +103,12 @@ class ImageViewer {
      * *
      * @param imageViews ImageView
      * *
-     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param anyList    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * *
      * @param clickItem  点击的图片
      */
-    fun open(context: Context, imageViews: List<ImageView>, objects: ArrayList<Any>, clickItem: Int) {
-        openImageViewer(context, imageViews, objects, clickItem, false)
+    fun open(context: Context, imageViews: List<ImageView>, anyList: ArrayList<Any>, clickItem: Int) {
+        openImageViewer(context, imageViews, anyList, clickItem, false)
     }
 
     /**
@@ -118,12 +118,12 @@ class ImageViewer {
      * *
      * @param imageViews ImageView
      * *
-     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param anyList    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * *
      * @param clickItem  点击的图片
      */
-    fun openWithChoose(context: Context, imageViews: List<ImageView>, objects: ArrayList<Any>, clickItem: Int) {
-        openImageViewer(context, imageViews, objects, clickItem, true)
+    fun openWithChoose(context: Context, imageViews: List<ImageView>, anyList: ArrayList<Any>, clickItem: Int) {
+        openImageViewer(context, imageViews, anyList, clickItem, true)
     }
 
     /**
@@ -133,15 +133,15 @@ class ImageViewer {
      * *
      * @param imageViews ImageView
      * *
-     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param anyList    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * *
      * @param clickItem  点击的图片
      * *
      * @param sizeFirst  只根据第一张图片来播放动画
      */
-    private fun openImageViewer(context: Context, imageViews: List<ImageView>, objects: ArrayList<Any>, clickItem: Int, sizeFirst: Boolean) {
+    private fun openImageViewer(context: Context, imageViews: List<ImageView>, anyList: ArrayList<Any>, clickItem: Int, sizeFirst: Boolean) {
         val showImage = ImageInfo(ArrayList<IntArray>(), 0, ArrayList<Any>())
-        showImage.img = objects
+        showImage.img = anyList
 
         val sizes = ArrayList<IntArray>()
         for (imageView in imageViews) {
@@ -177,9 +177,6 @@ class ImageViewer {
     }
 
     private fun openImageViewer(context: Context, showImage: ImageInfo) {
-        if (ImageViewerConfig.imageLoader == null) {
-            return
-        }
 
         registerReceiver(context)
 

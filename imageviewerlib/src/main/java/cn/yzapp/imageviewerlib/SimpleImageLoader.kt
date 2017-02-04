@@ -13,7 +13,7 @@ import java.io.File
  * * 图片加载默认实现类，文件与链接的图片加载需要根据自己的项目里用到的图片加载类来自己实现
  * * 也可以使用IImageLoader
  */
-open class DefaultImageLoader : IImageLoader {
+open class SimpleImageLoader : IImageLoader {
     override fun getImage(context: Context, imageView: ImageView, Url: String) {
         // 需要你自己来实现
     }

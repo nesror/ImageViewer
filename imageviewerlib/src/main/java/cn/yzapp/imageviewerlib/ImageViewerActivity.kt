@@ -126,12 +126,8 @@ class ImageViewerActivity : Activity() {
     }
 
     internal inner class SamplePagerAdapter : PagerAdapter() {
-        private val photoViews: SparseArray<SmoothImageView>
+        private val photoViews: SparseArray<SmoothImageView> = SparseArray(mShowImage.img.size)
         private var show: Boolean = false
-
-        init {
-            photoViews = SparseArray<SmoothImageView>(mShowImage.img.size)
-        }
 
         override fun getCount(): Int {
             return mShowImage.img.size
