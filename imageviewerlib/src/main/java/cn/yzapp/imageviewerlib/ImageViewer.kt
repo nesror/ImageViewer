@@ -72,8 +72,7 @@ class ImageViewer {
             }
 
             override fun onDestroy() {
-                if (mBroadcastReceiver != null)
-                    mLocalBroadcastManager?.unregisterReceiver(mBroadcastReceiver)
+                mLocalBroadcastManager?.unregisterReceiver(mBroadcastReceiver)
             }
         }
     }

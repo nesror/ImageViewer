@@ -1,6 +1,6 @@
 package cn.yzapp.imageviewerlib
 
-import android.support.annotation.DrawableRes
+import kotlin.properties.Delegates
 
 /**
  * @author nestor
@@ -10,10 +10,10 @@ import android.support.annotation.DrawableRes
 object ImageViewerConfig {
     /**
      * 设置全局图片加载器，必须实现
-
+     *
      * @param imageLoader IImageLoader
      */
-    var imageLoader: IImageLoader? = null
+    var imageLoader: IImageLoader by Delegates.notNull()
 
     /**
      * 设置全局选中时的指示器颜色

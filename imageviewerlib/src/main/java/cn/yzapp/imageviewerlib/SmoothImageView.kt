@@ -8,13 +8,16 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.graphics.PixelFormat
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 
 import uk.co.senab.photoview.PhotoView
+import kotlin.properties.Delegates
 
 /**
  * 基于 @author Dean Tao 的SmoothImageView修改而来
@@ -31,10 +34,10 @@ class SmoothImageView : PhotoView {
     private var mOriginalLocationX: Int = 0
     private var mOriginalLocationY: Int = 0
     private var mState = STATE_NORMAL
-    private var mSmoothMatrix: Matrix? = null
+    private var mSmoothMatrix: Matrix by Delegates.notNull()
     private var mBitmap: Bitmap? = null
     private var mTransformStart = false
-    private var mTransfrom: Transfrom? = null
+    private var mTransform: Transfrom? = null
 
     constructor(context: Context) : super(context) {
         initPaint()
@@ -57,7 +60,7 @@ class SmoothImageView : PhotoView {
         mOriginalHeight = height
         mOriginalLocationX = locationX
         mOriginalLocationY = locationY
-        mOriginalLocationY = mOriginalLocationY - Utils.getStatusBarHeight(context)
+        mOriginalLocationY -= Utils.getStatusBarHeight(context)
     }
 
     /**
@@ -120,26 +123,26 @@ class SmoothImageView : PhotoView {
         if (drawable is ColorDrawable) return
 
         if (mBitmap == null || mBitmap!!.isRecycled) {
-            mBitmap = (drawable as BitmapDrawable).bitmap
+            mBitmap = drawableToBitamp(drawable)
         }
         //防止mTransfrom重复的做同样的初始化
-        if (mTransfrom != null) {
+        if (mTransform != null) {
             return
         }
         if (width == 0 || height == 0) {
             return
         }
-        mTransfrom = Transfrom()
+        mTransform = Transfrom()
 
         /** 下面为缩放的计算  */
         /* 计算初始的缩放值，初始值因为是CENTR_CROP效果，所以要保证图片的宽和高至少1个能匹配原始的宽和高，另1个大于 */
         val xSScale = mOriginalWidth / mBitmap!!.width.toFloat()
         val ySScale = mOriginalHeight / mBitmap!!.height.toFloat()
-        mTransfrom!!.startScale = if (xSScale > ySScale) xSScale else ySScale
+        mTransform!!.startScale = if (xSScale > ySScale) xSScale else ySScale
         /* 计算结束时候的缩放值，结束值因为要达到FIT_CENTER效果，所以要保证图片的宽和高至少1个能匹配原始的宽和高，另1个小于 */
         val xEScale = width / mBitmap!!.width.toFloat()
         val yEScale = height / mBitmap!!.height.toFloat()
-        mTransfrom!!.endScale = if (xEScale < yEScale) xEScale else yEScale
+        mTransform!!.endScale = if (xEScale < yEScale) xEScale else yEScale
 
         /**
          * 下面计算Canvas Clip的范围，也就是图片的显示的范围，因为图片是慢慢变大，并且是等比例的，所以这个效果还需要裁减图片显示的区域
@@ -148,21 +151,37 @@ class SmoothImageView : PhotoView {
          * ，他就包括左上顶点坐标，和宽高，最后转为Canvas裁减的Rect.
          */
         /* 开始区域 */
-        mTransfrom!!.startRect = LocationSizeF()
-        mTransfrom!!.startRect!!.left = mOriginalLocationX.toFloat()
-        mTransfrom!!.startRect!!.top = mOriginalLocationY.toFloat()
-        mTransfrom!!.startRect!!.width = mOriginalWidth.toFloat()
-        mTransfrom!!.startRect!!.height = mOriginalHeight.toFloat()
+        mTransform!!.startRect = LocationSizeF()
+        mTransform!!.startRect!!.left = mOriginalLocationX.toFloat()
+        mTransform!!.startRect!!.top = mOriginalLocationY.toFloat()
+        mTransform!!.startRect!!.width = mOriginalWidth.toFloat()
+        mTransform!!.startRect!!.height = mOriginalHeight.toFloat()
         /* 结束区域 */
-        mTransfrom!!.endRect = LocationSizeF()
-        val bitmapEndWidth = mBitmap!!.width * mTransfrom!!.endScale// 图片最终的宽度
-        val bitmapEndHeight = mBitmap!!.height * mTransfrom!!.endScale// 图片最终的宽度
-        mTransfrom!!.endRect!!.left = (width - bitmapEndWidth) / 2
-        mTransfrom!!.endRect!!.top = (height - bitmapEndHeight) / 2
-        mTransfrom!!.endRect!!.width = bitmapEndWidth
-        mTransfrom!!.endRect!!.height = bitmapEndHeight
+        mTransform!!.endRect = LocationSizeF()
+        val bitmapEndWidth = mBitmap!!.width * mTransform!!.endScale// 图片最终的宽度
+        val bitmapEndHeight = mBitmap!!.height * mTransform!!.endScale// 图片最终的宽度
+        mTransform!!.endRect!!.left = (width - bitmapEndWidth) / 2
+        mTransform!!.endRect!!.top = (height - bitmapEndHeight) / 2
+        mTransform!!.endRect!!.width = bitmapEndWidth
+        mTransform!!.endRect!!.height = bitmapEndHeight
 
-        mTransfrom!!.rect = LocationSizeF()
+        mTransform!!.rect = LocationSizeF()
+    }
+
+    private fun drawableToBitamp(drawable: Drawable): Bitmap {
+        val w = drawable.intrinsicWidth
+        val h = drawable.intrinsicHeight
+        val config = if (drawable.opacity != PixelFormat.OPAQUE)
+            Bitmap.Config.ARGB_8888
+        else
+            Bitmap.Config.RGB_565
+        val bitmap = Bitmap.createBitmap(w, h, config)
+        //注意，下面三行代码要用到，否在在View或者surfaceview里的canvas.drawBitmap会看不到图
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, w, h)
+        drawable.draw(canvas)
+
+        return bitmap
     }
 
     private inner class LocationSizeF : Cloneable {
@@ -186,16 +205,17 @@ class SmoothImageView : PhotoView {
         if (drawable == null) {
             return
         }
-        if (mTransfrom == null) {
+        if (mTransform == null) {
             return
         }
         if (mBitmap == null || mBitmap!!.isRecycled) {
             mBitmap = (drawable as BitmapDrawable).bitmap
         }
+
         /* 下面实现了CENTER_CROP的功能 */
-        mSmoothMatrix!!.setScale(mTransfrom!!.scale, mTransfrom!!.scale)
-        mSmoothMatrix!!.postTranslate(-(mTransfrom!!.scale * mBitmap!!.width / 2 - mTransfrom!!.rect!!.width / 2),
-                -(mTransfrom!!.scale * mBitmap!!.height / 2 - mTransfrom!!.rect!!.height / 2))
+        mSmoothMatrix.setScale(mTransform!!.scale, mTransform!!.scale)
+        mSmoothMatrix.postTranslate(-(mTransform!!.scale * mBitmap!!.width / 2 - mTransform!!.rect!!.width / 2),
+                -(mTransform!!.scale * mBitmap!!.height / 2 - mTransform!!.rect!!.height / 2))
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -207,34 +227,34 @@ class SmoothImageView : PhotoView {
             if (mTransformStart) {
                 initTransform()
             }
-            if (mTransfrom == null) {
+            if (mTransform == null) {
                 super.onDraw(canvas)
                 return
             }
 
             if (mTransformStart) {
                 if (mState == STATE_TRANSFORM_IN) {
-                    mTransfrom!!.initStartIn()
+                    mTransform!!.initStartIn()
                 } else {
-                    mTransfrom!!.initStartOut()
+                    mTransform!!.initStartOut()
                 }
             }
 
             if (mTransformStart && BuildConfig.DEBUG) {
-                Log.d("SmoothImageView", "mTransfrom.startScale:" + mTransfrom!!.startScale)
-                Log.d("SmoothImageView", "mTransfrom.startScale:" + mTransfrom!!.endScale)
-                Log.d("SmoothImageView", "mTransfrom.scale:" + mTransfrom!!.scale)
-                Log.d("SmoothImageView", "mTransfrom.startRect:" + mTransfrom!!.startRect!!.toString())
-                Log.d("SmoothImageView", "mTransfrom.endRect:" + mTransfrom!!.endRect!!.toString())
-                Log.d("SmoothImageView", "mTransfrom.rect:" + mTransfrom!!.rect.toString())
+                Log.d("SmoothImageView", "mTransform.startScale:" + mTransform!!.startScale)
+                Log.d("SmoothImageView", "mTransform.startScale:" + mTransform!!.endScale)
+                Log.d("SmoothImageView", "mTransform.scale:" + mTransform!!.scale)
+                Log.d("SmoothImageView", "mTransform.startRect:" + mTransform!!.startRect!!.toString())
+                Log.d("SmoothImageView", "mTransform.endRect:" + mTransform!!.endRect!!.toString())
+                Log.d("SmoothImageView", "mTransform.rect:" + mTransform!!.rect.toString())
             }
 
             val saveCount = canvas.saveCount
             canvas.save()
             // 先得到图片在此刻的图像Matrix矩阵
             getBmpMatrix()
-            canvas.translate(mTransfrom!!.rect!!.left, mTransfrom!!.rect!!.top)
-            canvas.clipRect(0f, 0f, mTransfrom!!.rect!!.width, mTransfrom!!.rect!!.height)
+            canvas.translate(mTransform!!.rect!!.left, mTransform!!.rect!!.top)
+            canvas.clipRect(0f, 0f, mTransform!!.rect!!.width, mTransform!!.rect!!.height)
             canvas.concat(mSmoothMatrix)
             drawable.draw(canvas)
             canvas.restoreToCount(saveCount)
@@ -248,34 +268,34 @@ class SmoothImageView : PhotoView {
     }
 
     private fun startTransform(state: Int) {
-        if (mTransfrom == null) {
+        if (mTransform == null) {
             return
         }
         val valueAnimator = ValueAnimator()
         valueAnimator.duration = 380
         valueAnimator.interpolator = AccelerateDecelerateInterpolator()
         if (state == STATE_TRANSFORM_IN) {
-            val scaleHolder = PropertyValuesHolder.ofFloat("scale", mTransfrom!!.startScale, mTransfrom!!.endScale)
-            val leftHolder = PropertyValuesHolder.ofFloat("left", mTransfrom!!.startRect!!.left, mTransfrom!!.endRect!!.left)
-            val topHolder = PropertyValuesHolder.ofFloat("top", mTransfrom!!.startRect!!.top, mTransfrom!!.endRect!!.top)
-            val widthHolder = PropertyValuesHolder.ofFloat("width", mTransfrom!!.startRect!!.width, mTransfrom!!.endRect!!.width)
-            val heightHolder = PropertyValuesHolder.ofFloat("height", mTransfrom!!.startRect!!.height, mTransfrom!!.endRect!!.height)
+            val scaleHolder = PropertyValuesHolder.ofFloat("scale", mTransform!!.startScale, mTransform!!.endScale)
+            val leftHolder = PropertyValuesHolder.ofFloat("left", mTransform!!.startRect!!.left, mTransform!!.endRect!!.left)
+            val topHolder = PropertyValuesHolder.ofFloat("top", mTransform!!.startRect!!.top, mTransform!!.endRect!!.top)
+            val widthHolder = PropertyValuesHolder.ofFloat("width", mTransform!!.startRect!!.width, mTransform!!.endRect!!.width)
+            val heightHolder = PropertyValuesHolder.ofFloat("height", mTransform!!.startRect!!.height, mTransform!!.endRect!!.height)
             valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder)
         } else {
-            val scaleHolder = PropertyValuesHolder.ofFloat("scale", mTransfrom!!.endScale, mTransfrom!!.startScale)
-            val leftHolder = PropertyValuesHolder.ofFloat("left", mTransfrom!!.endRect!!.left, mTransfrom!!.startRect!!.left)
-            val topHolder = PropertyValuesHolder.ofFloat("top", mTransfrom!!.endRect!!.top, mTransfrom!!.startRect!!.top)
-            val widthHolder = PropertyValuesHolder.ofFloat("width", mTransfrom!!.endRect!!.width, mTransfrom!!.startRect!!.width)
-            val heightHolder = PropertyValuesHolder.ofFloat("height", mTransfrom!!.endRect!!.height, mTransfrom!!.startRect!!.height)
+            val scaleHolder = PropertyValuesHolder.ofFloat("scale", mTransform!!.endScale, mTransform!!.startScale)
+            val leftHolder = PropertyValuesHolder.ofFloat("left", mTransform!!.endRect!!.left, mTransform!!.startRect!!.left)
+            val topHolder = PropertyValuesHolder.ofFloat("top", mTransform!!.endRect!!.top, mTransform!!.startRect!!.top)
+            val widthHolder = PropertyValuesHolder.ofFloat("width", mTransform!!.endRect!!.width, mTransform!!.startRect!!.width)
+            val heightHolder = PropertyValuesHolder.ofFloat("height", mTransform!!.endRect!!.height, mTransform!!.startRect!!.height)
             valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder)
         }
 
         valueAnimator.addUpdateListener { animation ->
-            mTransfrom!!.scale = animation.getAnimatedValue("scale") as Float
-            mTransfrom!!.rect!!.left = animation.getAnimatedValue("left") as Float
-            mTransfrom!!.rect!!.top = animation.getAnimatedValue("top") as Float
-            mTransfrom!!.rect!!.width = animation.getAnimatedValue("width") as Float
-            mTransfrom!!.rect!!.height = animation.getAnimatedValue("height") as Float
+            mTransform!!.scale = animation.getAnimatedValue("scale") as Float
+            mTransform!!.rect!!.left = animation.getAnimatedValue("left") as Float
+            mTransform!!.rect!!.top = animation.getAnimatedValue("top") as Float
+            mTransform!!.rect!!.width = animation.getAnimatedValue("width") as Float
+            mTransform!!.rect!!.height = animation.getAnimatedValue("height") as Float
             invalidate()
             (context as Activity).window.decorView.invalidate()
         }

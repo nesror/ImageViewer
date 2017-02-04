@@ -3,13 +3,12 @@ package cn.yzapp.imageviewer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
             final View view = View.inflate(this, R.layout.view_img, null);
             final ImageView img = (ImageView) view.findViewById(R.id.img);
             if (url instanceof Integer) {
-                Picasso.with(this).load((int) url).into(img);
+                Glide.with(this).load((int) url).into(img);
             } else {
-                Picasso.with(this).load((String) url).into(img);
+                Glide.with(this).load((String) url).into(img);
             }
             img.setLayoutParams(lp);
 
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         ImageViewerConfig.INSTANCE.setImageLoader(new DefaultImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
-                Picasso.with(MainActivity.this).load(Url).into(imageView);
+                Glide.with(MainActivity.this).load(Url).into(imageView);
             }
         });
         //ImageViewerConfig.setChooseResIs(R.drawable.img_point_focused);

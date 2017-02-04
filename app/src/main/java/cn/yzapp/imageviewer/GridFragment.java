@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,13 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.yzapp.imageviewerlib.ImageViewer;
 import cn.yzapp.imageviewerlib.Utils;
-import me.relex.circleindicator.CircleIndicator;
 
 
 /**
@@ -94,9 +91,9 @@ public class GridFragment extends Fragment{
             final View view = View.inflate(getContext(), R.layout.view_img, null);
             final ImageView img = (ImageView) view.findViewById(R.id.img);
             if (url instanceof Integer) {
-                Picasso.with(getContext()).load((int) url).into(img);
+                Glide.with(getContext()).load((int) url).into(img);
             } else {
-                Picasso.with(getContext()).load((String) url).into(img);
+                Glide.with(getContext()).load((String) url).into(img);
             }
             img.setLayoutParams(lp);
 

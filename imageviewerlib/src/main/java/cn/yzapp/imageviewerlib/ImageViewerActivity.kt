@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_image_viewer.*
 import java.io.File
 
 import uk.co.senab.photoview.PhotoViewAttacher
+import kotlin.properties.Delegates
 
 /**
  * @author nestor
@@ -23,9 +24,11 @@ import uk.co.senab.photoview.PhotoViewAttacher
  */
 class ImageViewerActivity : Activity() {
 
-    private var mShowImage: ImageInfo? = null
-    private var mLocalBroadcastManager: LocalBroadcastManager? = null
-    private var mSamplePagerAdapter: SamplePagerAdapter? = null
+    private var mShowImage: ImageInfo by Delegates.notNull()
+    private var mLocalBroadcastManager: LocalBroadcastManager by Delegates.notNull()
+    private val mSamplePagerAdapter: SamplePagerAdapter by lazy {
+        SamplePagerAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +54,17 @@ class ImageViewerActivity : Activity() {
         intent.action = ImageViewer.BROADCAST_ACTION
         intent.putExtra("position", -1)
         intent.putExtra("onDestroy", true)
-        mLocalBroadcastManager!!.sendBroadcast(intent)
+        mLocalBroadcastManager.sendBroadcast(intent)
 
         super.onDestroy()
     }
 
     private fun setViewPage() {
-
-        mSamplePagerAdapter = SamplePagerAdapter()
         view_pager.adapter = mSamplePagerAdapter
 
         setCircleIndicator(view_pager)
 
-        view_pager.currentItem = mShowImage!!.index
+        view_pager.currentItem = mShowImage.index
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
@@ -71,10 +72,8 @@ class ImageViewerActivity : Activity() {
 
             override fun onPageSelected(position: Int) {
                 sendBroadcast(position)
-                val smoothImageView = mSamplePagerAdapter!!.getPhotoView(position)
-                if (smoothImageView != null) {
-                    smoothImageView.scale = 1.0f
-                }
+                val smoothImageView = mSamplePagerAdapter.getPhotoView(position)
+                smoothImageView?.scale = 1.0f
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -87,7 +86,7 @@ class ImageViewerActivity : Activity() {
         val indicatorUnselectedBackgroundId = intent.getIntExtra(ImageViewer.UNCHOOSE_RES_IS, 0)
         indicator.configureIndicator(-1, -1, -1, 0, 0, indicatorBackgroundId, indicatorUnselectedBackgroundId)
 
-        if (mShowImage!!.img.size > 1) {
+        if (mShowImage.img.size > 1) {
             indicator.visibility = View.VISIBLE
             indicator.setViewPager(mViewPager)
         }
@@ -98,7 +97,7 @@ class ImageViewerActivity : Activity() {
         val animator = ValueAnimator.ofInt(0, 0xFF)
         animator.addUpdateListener { animation ->
             val progress = animation.animatedValue as Int
-            root!!.setBackgroundColor(progress * 0x1000000)
+            root.setBackgroundColor(progress * 0x1000000)
         }
         // 设置插值器为均速滚动
         //animator.interpolator = LinearInterpolator()
@@ -111,7 +110,7 @@ class ImageViewerActivity : Activity() {
         val animator = ValueAnimator.ofInt(0xFF, 0)
         animator.addUpdateListener { animation ->
             val progress = animation.animatedValue as Int
-            root!!.setBackgroundColor(progress * 0x1000000)
+            root.setBackgroundColor(progress * 0x1000000)
         }
         // 设置插值器为均速滚动
         //animator.interpolator = LinearInterpolator()
@@ -123,7 +122,7 @@ class ImageViewerActivity : Activity() {
         val intent = Intent()
         intent.action = ImageViewer.BROADCAST_ACTION
         intent.putExtra("position", position)
-        mLocalBroadcastManager!!.sendBroadcast(intent)
+        mLocalBroadcastManager.sendBroadcast(intent)
     }
 
     internal inner class SamplePagerAdapter : PagerAdapter() {
@@ -131,22 +130,22 @@ class ImageViewerActivity : Activity() {
         private var show: Boolean = false
 
         init {
-            photoViews = SparseArray<SmoothImageView>(mShowImage!!.img.size)
+            photoViews = SparseArray<SmoothImageView>(mShowImage.img.size)
         }
 
         override fun getCount(): Int {
-            return mShowImage!!.img.size
+            return mShowImage.img.size
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = SmoothImageView(container.context)
             setImgSite(position, photoView)
 
-            if (position == mShowImage!!.index && !show) {
+            if (position == mShowImage.index && !show) {
                 photoView.transformIn()
                 show = true
             }
-            setPhotoView(photoView, mShowImage!!.img[position])
+            setPhotoView(photoView, mShowImage.img[position])
 
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
@@ -172,8 +171,8 @@ class ImageViewerActivity : Activity() {
          */
         private fun setImgSite(position: Int, photoView: SmoothImageView) {
             var size: IntArray? = null
-            if (mShowImage!!.sizes.size > position) {
-                size = mShowImage!!.sizes[position]
+            if (mShowImage.sizes.size > position) {
+                size = mShowImage.sizes[position]
             }
 
             if (size == null || size.size < 4) {
@@ -194,16 +193,16 @@ class ImageViewerActivity : Activity() {
 
         private fun setPhotoView(photoView: SmoothImageView, img: Any) {
             if (img is String) {
-                ImageViewerConfig.imageLoader!!.getImage(this@ImageViewerActivity, photoView, img)
+                ImageViewerConfig.imageLoader.getImage(this@ImageViewerActivity, photoView, img)
             }
             if (img is Int) {
-                ImageViewerConfig.imageLoader!!.getImage(this@ImageViewerActivity, photoView, img)
+                ImageViewerConfig.imageLoader.getImage(this@ImageViewerActivity, photoView, img)
             }
             if (img is File) {
-                ImageViewerConfig.imageLoader!!.getImage(this@ImageViewerActivity, photoView, img)
+                ImageViewerConfig.imageLoader.getImage(this@ImageViewerActivity, photoView, img)
             }
             if (img is Bitmap) {
-                ImageViewerConfig.imageLoader!!.getImage(this@ImageViewerActivity, photoView, img)
+                ImageViewerConfig.imageLoader.getImage(this@ImageViewerActivity, photoView, img)
             }
 
             photoView.setOnTransformListener(object : SmoothImageView.TransformListener {
