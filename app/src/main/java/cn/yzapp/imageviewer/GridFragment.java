@@ -64,15 +64,15 @@ public class GridFragment extends Fragment{
 
     private void initData() {
         urlList = new ArrayList<>();
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
-        //urlList.add(R.mipmap.ic_launcher);
-        urlList.add("http://static.qichechaoren.com/thumb/twl/contract/2016/06/11bcf0e71e7ce436,h_120,w_170.jpg");
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
-        //urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
+        urlList.add(R.mipmap.ic_launcher);
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
+        urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
     }
 
     private void initGridLayout(View root) {

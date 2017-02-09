@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import cn.yzapp.imageviewer.dummy.DummyContent;
 import cn.yzapp.imageviewerlib.SimpleImageLoader;
@@ -153,7 +153,7 @@ public class TabActivity extends AppCompatActivity
         ImageViewerConfig.INSTANCE.setImageLoader(new SimpleImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
-                Glide.with(TabActivity.this).load(Url).into(imageView);
+                Picasso.with(TabActivity.this).load(Url).into(imageView);
             }
         });
         //ImageViewerConfig.setChooseResIs(R.drawable.img_point_focused);
