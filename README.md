@@ -17,16 +17,16 @@ Step 2. Add the dependency
 
 Use
 ----------------------------
-Step 1. 实现IImageLoader设置图片加载器，也可以使用默认实现类DefaultImageLoader()
+Step 1. 实现IImageLoader设置图片加载器，也可以使用实现类SimpleImageLoader()
 ```{Kotlin}
-    ImageViewerConfig.imageLoader = object : DefaultImageLoader() {
+    ImageViewerConfig.imageLoader = object : SimpleImageLoader() {
             override fun getImage(context: Context, imageView: ImageView, Url: String) {
                 Picasso.with(this@TabActivity).load(Url).into(imageView)
             }
         }
 ````
 ````{java}
-    ImageViewerConfig.INSTANCE.setImageLoader(new DefaultImageLoader() {
+    ImageViewerConfig.INSTANCE.setImageLoader(new SimpleImageLoader() {
             @Override
             public void getImage(Context context, ImageView imageView, String Url) {
                 Picasso.with(TabActivity.this).load(Url).into(imageView);
