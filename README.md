@@ -35,13 +35,21 @@ Step 1. 实现IImageLoader设置图片加载器，也可以使用实现类Simple
 ````
 Step 2. 使用
 ```{java}
-
+    /**
+     * 打开图片浏览单张
+     *
+     * @param context    Context
+     * @param imageView  ImageView
+     * @param object     传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     */
+    imageViewer.open(context, imageView, object);
+    
     /**
      * 打开图片浏览多张
      *
      * @param context    Context
-     * @param imageViews ImageView
-     * @param objects    传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
+     * @param imageViews List<ImageView>
+     * @param objects    List<Object> 传入格式支持：String:图片的url;(@DrawableRes) int:资源id;Bitmap;File
      * @param clickItem  点击的图片
      */
     imageViewer.open(context, imageViews, objects, clickItem);
