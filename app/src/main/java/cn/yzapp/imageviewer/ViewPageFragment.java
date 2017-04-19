@@ -36,7 +36,7 @@ public class ViewPageFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ViewPager mViewPager;
     private CircleIndicator mIndicator;
-    private ArrayList<Object> urlList;
+    private List<Object> urlList;
     private List<ImageView> mImageList = new ArrayList<>();
 
     public ViewPageFragment() {

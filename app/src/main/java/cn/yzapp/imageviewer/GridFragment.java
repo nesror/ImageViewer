@@ -32,7 +32,7 @@ import cn.yzapp.imageviewerlib.Utils;
 public class GridFragment extends Fragment{
 
     private OnFragmentInteractionListener mListener;
-    private ArrayList<Object> urlList;
+    private List<Object> urlList;
 
     public GridFragment() {
         // Required empty public constructor

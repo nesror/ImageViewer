@@ -107,7 +107,7 @@ class ImageViewer {
      * *
      * @param clickItem  点击的图片
      */
-    fun open(context: Context, imageViews: List<ImageView>, anyList: ArrayList<Any>, clickItem: Int) {
+    fun open(context: Context, imageViews: List<ImageView>, anyList: List<Any>, clickItem: Int) {
         openImageViewer(context, imageViews, anyList, clickItem, false)
     }
 
@@ -122,7 +122,7 @@ class ImageViewer {
      * *
      * @param clickItem  点击的图片
      */
-    fun openWithChoose(context: Context, imageViews: List<ImageView>, anyList: ArrayList<Any>, clickItem: Int) {
+    fun openWithChoose(context: Context, imageViews: List<ImageView>, anyList: List<Any>, clickItem: Int) {
         openImageViewer(context, imageViews, anyList, clickItem, true)
     }
 
@@ -139,7 +139,7 @@ class ImageViewer {
      * *
      * @param sizeFirst  只根据第一张图片来播放动画
      */
-    private fun openImageViewer(context: Context, imageViews: List<ImageView>, anyList: ArrayList<Any>, clickItem: Int, sizeFirst: Boolean) {
+    private fun openImageViewer(context: Context, imageViews: List<ImageView>, anyList: List<Any>, clickItem: Int, sizeFirst: Boolean) {
         val showImage = ImageInfo(ArrayList<IntArray>(), 0, ArrayList<Any>())
         showImage.img = anyList
 
