@@ -12,6 +12,7 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -60,7 +61,9 @@ class SmoothImageView : PhotoView {
         mOriginalHeight = height
         mOriginalLocationX = locationX
         mOriginalLocationY = locationY
-        mOriginalLocationY -= Utils.getStatusBarHeight(context)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            mOriginalLocationY -= Utils.getStatusBarHeight(context)
+        }
     }
 
     /**

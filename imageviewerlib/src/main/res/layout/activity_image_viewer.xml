@@ -4,7 +4,6 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
     tools:context=".ImageViewerActivity">
 
     <cn.yzapp.imageviewerlib.HackyViewPager
@@ -17,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+        android:layout_marginBottom="30dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </RelativeLayout>

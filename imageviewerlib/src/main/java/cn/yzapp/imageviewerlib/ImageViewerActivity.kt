@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.PagerAdapter
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_image_viewer.*
 
 import java.io.File
@@ -34,9 +36,13 @@ class ImageViewerActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_image_viewer)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        }
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this)
-        mShowImage = intent.getParcelableExtra<ImageInfo>(ImageViewer.INTENT_IMAGE)
+        mShowImage = intent.getParcelableExtra(ImageViewer.INTENT_IMAGE)
 
         setViewPage()
         setOpenAnimator()
