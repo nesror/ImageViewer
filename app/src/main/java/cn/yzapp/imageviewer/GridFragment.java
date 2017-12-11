@@ -64,7 +64,7 @@ public class GridFragment extends Fragment{
 
     private void initData() {
         urlList = new ArrayList<>();
-        urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
+        urlList.add("http://b.hiphotos.baidu.com/zhidao/pic/item/b8014a90f603738d68a37c4eb31bb051f919ecf5.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/081730219.jpg");
         urlList.add("http://news.mydrivers.com/img/topimg/20160711/191353087.jpg");
